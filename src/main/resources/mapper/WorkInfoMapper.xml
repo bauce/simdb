@@ -6,8 +6,9 @@
     <result column="wid" jdbcType="INTEGER" property="wid" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="finished" jdbcType="TINYINT" property="finished" />
-    <result column="pre_finish_time" jdbcType="TIMESTAMP" property="preFinishTime" />
+    <result column="date" jdbcType="DATE" property="date" />
     <result column="bgs_comment" jdbcType="CHAR" property="bgsComment" />
+    <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yy.simdb.entity.WorkInfo">
     <result column="info" jdbcType="LONGVARCHAR" property="info" />
@@ -71,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, wid, status, finished, pre_finish_time, bgs_comment
+    id, wid, status, finished, date, bgs_comment, modify_time
   </sql>
   <sql id="Blob_Column_List">
     info
@@ -126,11 +127,11 @@
   </delete>
   <insert id="insert" parameterType="com.yy.simdb.entity.WorkInfo">
     insert into work_info (id, wid, status, 
-      finished, pre_finish_time, bgs_comment, 
-      info)
+      finished, date, bgs_comment, 
+      modify_time, info)
     values (#{id,jdbcType=INTEGER}, #{wid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{finished,jdbcType=TINYINT}, #{preFinishTime,jdbcType=TIMESTAMP}, #{bgsComment,jdbcType=CHAR}, 
-      #{info,jdbcType=LONGVARCHAR})
+      #{finished,jdbcType=TINYINT}, #{date,jdbcType=DATE}, #{bgsComment,jdbcType=CHAR}, 
+      #{modifyTime,jdbcType=TIMESTAMP}, #{info,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yy.simdb.entity.WorkInfo">
     insert into work_info
@@ -147,11 +148,14 @@
       <if test="finished != null">
         finished,
       </if>
-      <if test="preFinishTime != null">
-        pre_finish_time,
+      <if test="date != null">
+        date,
       </if>
       <if test="bgsComment != null">
         bgs_comment,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
       </if>
       <if test="info != null">
         info,
@@ -170,11 +174,14 @@
       <if test="finished != null">
         #{finished,jdbcType=TINYINT},
       </if>
-      <if test="preFinishTime != null">
-        #{preFinishTime,jdbcType=TIMESTAMP},
+      <if test="date != null">
+        #{date,jdbcType=DATE},
       </if>
       <if test="bgsComment != null">
         #{bgsComment,jdbcType=CHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=TIMESTAMP},
       </if>
       <if test="info != null">
         #{info,jdbcType=LONGVARCHAR},
@@ -202,11 +209,14 @@
       <if test="record.finished != null">
         finished = #{record.finished,jdbcType=TINYINT},
       </if>
-      <if test="record.preFinishTime != null">
-        pre_finish_time = #{record.preFinishTime,jdbcType=TIMESTAMP},
+      <if test="record.date != null">
+        date = #{record.date,jdbcType=DATE},
       </if>
       <if test="record.bgsComment != null">
         bgs_comment = #{record.bgsComment,jdbcType=CHAR},
+      </if>
+      <if test="record.modifyTime != null">
+        modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.info != null">
         info = #{record.info,jdbcType=LONGVARCHAR},
@@ -222,8 +232,9 @@
       wid = #{record.wid,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
       finished = #{record.finished,jdbcType=TINYINT},
-      pre_finish_time = #{record.preFinishTime,jdbcType=TIMESTAMP},
+      date = #{record.date,jdbcType=DATE},
       bgs_comment = #{record.bgsComment,jdbcType=CHAR},
+      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP},
       info = #{record.info,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -235,8 +246,9 @@
       wid = #{record.wid,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
       finished = #{record.finished,jdbcType=TINYINT},
-      pre_finish_time = #{record.preFinishTime,jdbcType=TIMESTAMP},
-      bgs_comment = #{record.bgsComment,jdbcType=CHAR}
+      date = #{record.date,jdbcType=DATE},
+      bgs_comment = #{record.bgsComment,jdbcType=CHAR},
+      modify_time = #{record.modifyTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -253,11 +265,14 @@
       <if test="finished != null">
         finished = #{finished,jdbcType=TINYINT},
       </if>
-      <if test="preFinishTime != null">
-        pre_finish_time = #{preFinishTime,jdbcType=TIMESTAMP},
+      <if test="date != null">
+        date = #{date,jdbcType=DATE},
       </if>
       <if test="bgsComment != null">
         bgs_comment = #{bgsComment,jdbcType=CHAR},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
       <if test="info != null">
         info = #{info,jdbcType=LONGVARCHAR},
@@ -270,8 +285,9 @@
     set wid = #{wid,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       finished = #{finished,jdbcType=TINYINT},
-      pre_finish_time = #{preFinishTime,jdbcType=TIMESTAMP},
+      date = #{date,jdbcType=DATE},
       bgs_comment = #{bgsComment,jdbcType=CHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       info = #{info,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -280,8 +296,9 @@
     set wid = #{wid,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       finished = #{finished,jdbcType=TINYINT},
-      pre_finish_time = #{preFinishTime,jdbcType=TIMESTAMP},
-      bgs_comment = #{bgsComment,jdbcType=CHAR}
+      date = #{date,jdbcType=DATE},
+      bgs_comment = #{bgsComment,jdbcType=CHAR},
+      modify_time = #{modifyTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

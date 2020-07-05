@@ -5,6 +5,17 @@
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
     <result column="menu_id" jdbcType="INTEGER" property="menuId" />
   </resultMap>
+
+  <resultMap id="RoleMenu" type="com.yy.simdb.entity.RoleMenu">
+    <result property="menuId" column="menu_id"/>
+    <result property="roleId" column="role_id"/>
+  </resultMap>
+
+  <select id="getRoleMenuByRoleId" resultMap="RoleMenu">
+    select * from role_menu
+    where role_id = #{roleId}
+  </select>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

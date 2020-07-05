@@ -7,6 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface RoleMenuMapper {
+
+    List<RoleMenu>  getRoleMenuByRoleId(long roleId);
+
     long countByExample(RoleMenuExample example);
 
     int deleteByExample(RoleMenuExample example);

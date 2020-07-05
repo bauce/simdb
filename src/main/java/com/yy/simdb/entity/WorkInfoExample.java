@@ -2,6 +2,7 @@ package com.yy.simdb.entity;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class WorkInfoExample {
@@ -103,6 +104,32 @@ public class WorkInfoExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
+        }
+
+        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            addCriterion(condition, new java.sql.Date(value.getTime()), property);
+        }
+
+        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
+            if (values == null || values.size() == 0) {
+                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
+            }
+            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
+            Iterator<Date> iter = values.iterator();
+            while (iter.hasNext()) {
+                dateList.add(new java.sql.Date(iter.next().getTime()));
+            }
+            addCriterion(condition, dateList, property);
+        }
+
+        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -345,63 +372,63 @@ public class WorkInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeIsNull() {
-            addCriterion("pre_finish_time is null");
+        public Criteria andDateIsNull() {
+            addCriterion("date is null");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeIsNotNull() {
-            addCriterion("pre_finish_time is not null");
+        public Criteria andDateIsNotNull() {
+            addCriterion("date is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeEqualTo(Date value) {
-            addCriterion("pre_finish_time =", value, "preFinishTime");
+        public Criteria andDateEqualTo(Date value) {
+            addCriterionForJDBCDate("date =", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeNotEqualTo(Date value) {
-            addCriterion("pre_finish_time <>", value, "preFinishTime");
+        public Criteria andDateNotEqualTo(Date value) {
+            addCriterionForJDBCDate("date <>", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeGreaterThan(Date value) {
-            addCriterion("pre_finish_time >", value, "preFinishTime");
+        public Criteria andDateGreaterThan(Date value) {
+            addCriterionForJDBCDate("date >", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("pre_finish_time >=", value, "preFinishTime");
+        public Criteria andDateGreaterThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("date >=", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeLessThan(Date value) {
-            addCriterion("pre_finish_time <", value, "preFinishTime");
+        public Criteria andDateLessThan(Date value) {
+            addCriterionForJDBCDate("date <", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeLessThanOrEqualTo(Date value) {
-            addCriterion("pre_finish_time <=", value, "preFinishTime");
+        public Criteria andDateLessThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("date <=", value, "date");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeIn(List<Date> values) {
-            addCriterion("pre_finish_time in", values, "preFinishTime");
+        public Criteria andDateIn(List<Date> values) {
+            addCriterionForJDBCDate("date in", values, "date");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeNotIn(List<Date> values) {
-            addCriterion("pre_finish_time not in", values, "preFinishTime");
+        public Criteria andDateNotIn(List<Date> values) {
+            addCriterionForJDBCDate("date not in", values, "date");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeBetween(Date value1, Date value2) {
-            addCriterion("pre_finish_time between", value1, value2, "preFinishTime");
+        public Criteria andDateBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("date between", value1, value2, "date");
             return (Criteria) this;
         }
 
-        public Criteria andPreFinishTimeNotBetween(Date value1, Date value2) {
-            addCriterion("pre_finish_time not between", value1, value2, "preFinishTime");
+        public Criteria andDateNotBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("date not between", value1, value2, "date");
             return (Criteria) this;
         }
 
@@ -472,6 +499,66 @@ public class WorkInfoExample {
 
         public Criteria andBgsCommentNotBetween(String value1, String value2) {
             addCriterion("bgs_comment not between", value1, value2, "bgsComment");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeIsNull() {
+            addCriterion("modify_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeIsNotNull() {
+            addCriterion("modify_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeEqualTo(Date value) {
+            addCriterion("modify_time =", value, "modifyTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeNotEqualTo(Date value) {
+            addCriterion("modify_time <>", value, "modifyTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeGreaterThan(Date value) {
+            addCriterion("modify_time >", value, "modifyTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("modify_time >=", value, "modifyTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeLessThan(Date value) {
+            addCriterion("modify_time <", value, "modifyTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeLessThanOrEqualTo(Date value) {
+            addCriterion("modify_time <=", value, "modifyTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeIn(List<Date> values) {
+            addCriterion("modify_time in", values, "modifyTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeNotIn(List<Date> values) {
+            addCriterion("modify_time not in", values, "modifyTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeBetween(Date value1, Date value2) {
+            addCriterion("modify_time between", value1, value2, "modifyTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andModifyTimeNotBetween(Date value1, Date value2) {
+            addCriterion("modify_time not between", value1, value2, "modifyTime");
             return (Criteria) this;
         }
     }

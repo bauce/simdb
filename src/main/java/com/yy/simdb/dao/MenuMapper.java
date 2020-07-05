@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface MenuMapper {
+
     long countByExample(MenuExample example);
 
     int deleteByExample(MenuExample example);
@@ -27,5 +28,5 @@ public interface MenuMapper {
 
     int updateByPrimaryKeySelective(Menu record);
 
-    int updateByPrimaryKey(Menu record);
+    Menu getMenuById(int id);
 }

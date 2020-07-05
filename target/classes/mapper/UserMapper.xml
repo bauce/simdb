@@ -9,6 +9,19 @@
     <result column="phone" jdbcType="CHAR" property="phone" />
     <result column="email" jdbcType="CHAR" property="email" />
   </resultMap>
+
+  <select id="login" resultMap="BaseResultMap">
+    select * from user
+    <where>
+      <if test="username != null">
+        and username = #{username}
+      </if>
+      <if test="password != null">
+        and password = #{password}
+      </if>
+    </where>
+  </select>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">

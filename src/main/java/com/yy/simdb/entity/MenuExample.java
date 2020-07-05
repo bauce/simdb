@@ -304,73 +304,73 @@ public class MenuExample {
             return (Criteria) this;
         }
 
-        public Criteria andHerfIsNull() {
-            addCriterion("herf is null");
+        public Criteria andhrefIsNull() {
+            addCriterion("href is null");
             return (Criteria) this;
         }
 
-        public Criteria andHerfIsNotNull() {
-            addCriterion("herf is not null");
+        public Criteria andhrefIsNotNull() {
+            addCriterion("href is not null");
             return (Criteria) this;
         }
 
-        public Criteria andHerfEqualTo(String value) {
-            addCriterion("herf =", value, "herf");
+        public Criteria andhrefEqualTo(String value) {
+            addCriterion("href =", value, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfNotEqualTo(String value) {
-            addCriterion("herf <>", value, "herf");
+        public Criteria andhrefNotEqualTo(String value) {
+            addCriterion("href <>", value, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfGreaterThan(String value) {
-            addCriterion("herf >", value, "herf");
+        public Criteria andhrefGreaterThan(String value) {
+            addCriterion("href >", value, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfGreaterThanOrEqualTo(String value) {
-            addCriterion("herf >=", value, "herf");
+        public Criteria andhrefGreaterThanOrEqualTo(String value) {
+            addCriterion("href >=", value, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfLessThan(String value) {
-            addCriterion("herf <", value, "herf");
+        public Criteria andhrefLessThan(String value) {
+            addCriterion("href <", value, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfLessThanOrEqualTo(String value) {
-            addCriterion("herf <=", value, "herf");
+        public Criteria andhrefLessThanOrEqualTo(String value) {
+            addCriterion("href <=", value, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfLike(String value) {
-            addCriterion("herf like", value, "herf");
+        public Criteria andhrefLike(String value) {
+            addCriterion("href like", value, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfNotLike(String value) {
-            addCriterion("herf not like", value, "herf");
+        public Criteria andhrefNotLike(String value) {
+            addCriterion("href not like", value, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfIn(List<String> values) {
-            addCriterion("herf in", values, "herf");
+        public Criteria andhrefIn(List<String> values) {
+            addCriterion("href in", values, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfNotIn(List<String> values) {
-            addCriterion("herf not in", values, "herf");
+        public Criteria andhrefNotIn(List<String> values) {
+            addCriterion("href not in", values, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfBetween(String value1, String value2) {
-            addCriterion("herf between", value1, value2, "herf");
+        public Criteria andhrefBetween(String value1, String value2) {
+            addCriterion("href between", value1, value2, "href");
             return (Criteria) this;
         }
 
-        public Criteria andHerfNotBetween(String value1, String value2) {
-            addCriterion("herf not between", value1, value2, "herf");
+        public Criteria andhrefNotBetween(String value1, String value2) {
+            addCriterion("href not between", value1, value2, "href");
             return (Criteria) this;
         }
 

@@ -1,5 +1,7 @@
 package com.yy.simdb.entity;
 
+import java.util.List;
+
 public class Menu {
     private Integer id;
 
@@ -7,7 +9,7 @@ public class Menu {
 
     private String icon;
 
-    private String herf;
+    private String href;
 
     private String perms;
 
@@ -16,6 +18,16 @@ public class Menu {
     private Integer parentId;
 
     private Integer sort;
+
+    public List<Menu> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Menu> children) {
+        this.children = children;
+    }
+
+    private List<Menu> children;
 
     public Integer getId() {
         return id;
@@ -41,12 +53,12 @@ public class Menu {
         this.icon = icon == null ? null : icon.trim();
     }
 
-    public String getHerf() {
-        return herf;
+    public String gethref() {
+        return href;
     }
 
-    public void setHerf(String herf) {
-        this.herf = herf == null ? null : herf.trim();
+    public void sethref(String href) {
+        this.href = href == null ? null : href.trim();
     }
 
     public String getPerms() {
@@ -90,7 +102,7 @@ public class Menu {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", icon=").append(icon);
-        sb.append(", herf=").append(herf);
+        sb.append(", href=").append(href);
         sb.append(", perms=").append(perms);
         sb.append(", spread=").append(spread);
         sb.append(", parentId=").append(parentId);

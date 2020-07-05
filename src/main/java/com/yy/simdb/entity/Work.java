@@ -5,17 +5,21 @@ import java.util.Date;
 public class Work {
     private Integer id;
 
-    private Float no;
-
-    private Integer userId;
+    private String no;
 
     private Integer type;
 
+    private String origin;
+
     private Date dueTime;
+
+    private String dueTimeAlt;
 
     private Byte finished;
 
     private String other;
+
+    private String content;
 
     public Integer getId() {
         return id;
@@ -25,20 +29,12 @@ public class Work {
         this.id = id;
     }
 
-    public Float getNo() {
+    public String getNo() {
         return no;
     }
 
-    public void setNo(Float no) {
-        this.no = no;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setNo(String no) {
+        this.no = no == null ? null : no.trim();
     }
 
     public Integer getType() {
@@ -49,12 +45,28 @@ public class Work {
         this.type = type;
     }
 
+    public String getOrigin() {
+        return origin;
+    }
+
+    public void setOrigin(String origin) {
+        this.origin = origin == null ? null : origin.trim();
+    }
+
     public Date getDueTime() {
         return dueTime;
     }
 
     public void setDueTime(Date dueTime) {
         this.dueTime = dueTime;
+    }
+
+    public String getDueTimeAlt() {
+        return dueTimeAlt;
+    }
+
+    public void setDueTimeAlt(String dueTimeAlt) {
+        this.dueTimeAlt = dueTimeAlt == null ? null : dueTimeAlt.trim();
     }
 
     public Byte getFinished() {
@@ -73,6 +85,14 @@ public class Work {
         this.other = other == null ? null : other.trim();
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -81,11 +101,13 @@ public class Work {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", no=").append(no);
-        sb.append(", userId=").append(userId);
         sb.append(", type=").append(type);
+        sb.append(", origin=").append(origin);
         sb.append(", dueTime=").append(dueTime);
+        sb.append(", dueTimeAlt=").append(dueTimeAlt);
         sb.append(", finished=").append(finished);
         sb.append(", other=").append(other);
+        sb.append(", content=").append(content);
         sb.append("]");
         return sb.toString();
     }

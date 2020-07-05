@@ -11,9 +11,11 @@ public class WorkInfo {
 
     private Byte finished;
 
-    private Date preFinishTime;
+    private Date date;
 
     private String bgsComment;
+
+    private Date modifyTime;
 
     private String info;
 
@@ -49,12 +51,12 @@ public class WorkInfo {
         this.finished = finished;
     }
 
-    public Date getPreFinishTime() {
-        return preFinishTime;
+    public Date getDate() {
+        return date;
     }
 
-    public void setPreFinishTime(Date preFinishTime) {
-        this.preFinishTime = preFinishTime;
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     public String getBgsComment() {
@@ -63,6 +65,14 @@ public class WorkInfo {
 
     public void setBgsComment(String bgsComment) {
         this.bgsComment = bgsComment == null ? null : bgsComment.trim();
+    }
+
+    public Date getModifyTime() {
+        return modifyTime;
+    }
+
+    public void setModifyTime(Date modifyTime) {
+        this.modifyTime = modifyTime;
     }
 
     public String getInfo() {
@@ -83,8 +93,9 @@ public class WorkInfo {
         sb.append(", wid=").append(wid);
         sb.append(", status=").append(status);
         sb.append(", finished=").append(finished);
-        sb.append(", preFinishTime=").append(preFinishTime);
+        sb.append(", date=").append(date);
         sb.append(", bgsComment=").append(bgsComment);
+        sb.append(", modifyTime=").append(modifyTime);
         sb.append(", info=").append(info);
         sb.append("]");
         return sb.toString();

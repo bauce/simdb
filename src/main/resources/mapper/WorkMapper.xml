@@ -3,17 +3,35 @@
 <mapper namespace="com.yy.simdb.dao.WorkMapper">
   <resultMap id="BaseResultMap" type="com.yy.simdb.entity.Work">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="no" jdbcType="REAL" property="no" />
-    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="no" jdbcType="CHAR" property="no" />
     <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="due_time" jdbcType="TIMESTAMP" property="dueTime" />
+    <result column="origin" jdbcType="CHAR" property="origin" />
+    <result column="due_time" jdbcType="DATE" property="dueTime" />
+    <result column="due_time_alt" jdbcType="CHAR" property="dueTimeAlt" />
     <result column="finished" jdbcType="TINYINT" property="finished" />
     <result column="other" jdbcType="CHAR" property="other" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yy.simdb.entity.WorkWithBLOBs">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yy.simdb.entity.Work">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
-    <result column="origin" jdbcType="LONGVARCHAR" property="origin" />
   </resultMap>
+  <select id="getAllWorkList" resultMap="ResultMapWithBLOBs">
+    select * from work
+    <where>
+      <if test="type != null and '' != type">
+        and type = #{type}
+      </if>
+      <if test="no != null and ''!=no">
+        and no = #{no}
+      </if>
+      <if test="dueTimeAlt !=null and '' != dueTimeAlt">
+        and dueTimeAlt like '%${dueTimeAlt}%'
+      </if>
+      <if test="finished != null and ''!= finished">
+        and finished = #{finished}
+      </if>
+    </where>
+  </select>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -73,10 +91,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, no, user_id, type, due_time, finished, other
+    id, no, type, origin, due_time, due_time_alt, finished, other
   </sql>
   <sql id="Blob_Column_List">
-    content, origin
+    content
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="com.yy.simdb.entity.WorkExample" resultMap="ResultMapWithBLOBs">
     select
@@ -126,17 +144,15 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.yy.simdb.entity.WorkWithBLOBs">
-    insert into work (id, no, user_id, 
-      type, due_time, finished, 
-      other, content, origin
-      )
-    values (#{id,jdbcType=INTEGER}, #{no,jdbcType=REAL}, #{userId,jdbcType=INTEGER}, 
-      #{type,jdbcType=INTEGER}, #{dueTime,jdbcType=TIMESTAMP}, #{finished,jdbcType=TINYINT}, 
-      #{other,jdbcType=CHAR}, #{content,jdbcType=LONGVARCHAR}, #{origin,jdbcType=LONGVARCHAR}
-      )
+  <insert id="insert" parameterType="com.yy.simdb.entity.Work">
+    insert into work (id, no, type, origin, 
+      due_time, due_time_alt, finished, 
+      other, content)
+    values (#{id,jdbcType=INTEGER}, #{no,jdbcType=CHAR}, #{type,jdbcType=INTEGER}, #{origin,jdbcType=CHAR}, 
+      #{dueTime,jdbcType=DATE}, #{dueTimeAlt,jdbcType=CHAR}, #{finished,jdbcType=TINYINT}, 
+      #{other,jdbcType=CHAR}, #{content,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.yy.simdb.entity.WorkWithBLOBs">
+  <insert id="insertSelective" parameterType="com.yy.simdb.entity.Work">
     insert into work
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -145,14 +161,17 @@
       <if test="no != null">
         no,
       </if>
-      <if test="userId != null">
-        user_id,
-      </if>
       <if test="type != null">
         type,
       </if>
+      <if test="origin != null">
+        origin,
+      </if>
       <if test="dueTime != null">
         due_time,
+      </if>
+      <if test="dueTimeAlt != null">
+        due_time_alt,
       </if>
       <if test="finished != null">
         finished,
@@ -163,25 +182,25 @@
       <if test="content != null">
         content,
       </if>
-      <if test="origin != null">
-        origin,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
       <if test="no != null">
-        #{no,jdbcType=REAL},
-      </if>
-      <if test="userId != null">
-        #{userId,jdbcType=INTEGER},
+        #{no,jdbcType=CHAR},
       </if>
       <if test="type != null">
         #{type,jdbcType=INTEGER},
       </if>
+      <if test="origin != null">
+        #{origin,jdbcType=CHAR},
+      </if>
       <if test="dueTime != null">
-        #{dueTime,jdbcType=TIMESTAMP},
+        #{dueTime,jdbcType=DATE},
+      </if>
+      <if test="dueTimeAlt != null">
+        #{dueTimeAlt,jdbcType=CHAR},
       </if>
       <if test="finished != null">
         #{finished,jdbcType=TINYINT},
@@ -191,9 +210,6 @@
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="origin != null">
-        #{origin,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -210,16 +226,19 @@
         id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.no != null">
-        no = #{record.no,jdbcType=REAL},
-      </if>
-      <if test="record.userId != null">
-        user_id = #{record.userId,jdbcType=INTEGER},
+        no = #{record.no,jdbcType=CHAR},
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=INTEGER},
       </if>
+      <if test="record.origin != null">
+        origin = #{record.origin,jdbcType=CHAR},
+      </if>
       <if test="record.dueTime != null">
-        due_time = #{record.dueTime,jdbcType=TIMESTAMP},
+        due_time = #{record.dueTime,jdbcType=DATE},
+      </if>
+      <if test="record.dueTimeAlt != null">
+        due_time_alt = #{record.dueTimeAlt,jdbcType=CHAR},
       </if>
       <if test="record.finished != null">
         finished = #{record.finished,jdbcType=TINYINT},
@@ -230,9 +249,6 @@
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
-      <if test="record.origin != null">
-        origin = #{record.origin,jdbcType=LONGVARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -241,14 +257,14 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update work
     set id = #{record.id,jdbcType=INTEGER},
-      no = #{record.no,jdbcType=REAL},
-      user_id = #{record.userId,jdbcType=INTEGER},
+      no = #{record.no,jdbcType=CHAR},
       type = #{record.type,jdbcType=INTEGER},
-      due_time = #{record.dueTime,jdbcType=TIMESTAMP},
+      origin = #{record.origin,jdbcType=CHAR},
+      due_time = #{record.dueTime,jdbcType=DATE},
+      due_time_alt = #{record.dueTimeAlt,jdbcType=CHAR},
       finished = #{record.finished,jdbcType=TINYINT},
       other = #{record.other,jdbcType=CHAR},
-      content = #{record.content,jdbcType=LONGVARCHAR},
-      origin = #{record.origin,jdbcType=LONGVARCHAR}
+      content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -256,30 +272,34 @@
   <update id="updateByExample" parameterType="map">
     update work
     set id = #{record.id,jdbcType=INTEGER},
-      no = #{record.no,jdbcType=REAL},
-      user_id = #{record.userId,jdbcType=INTEGER},
+      no = #{record.no,jdbcType=CHAR},
       type = #{record.type,jdbcType=INTEGER},
-      due_time = #{record.dueTime,jdbcType=TIMESTAMP},
+      origin = #{record.origin,jdbcType=CHAR},
+      due_time = #{record.dueTime,jdbcType=DATE},
+      due_time_alt = #{record.dueTimeAlt,jdbcType=CHAR},
       finished = #{record.finished,jdbcType=TINYINT},
       other = #{record.other,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.yy.simdb.entity.WorkWithBLOBs">
+  <update id="updateByPrimaryKeySelective" parameterType="com.yy.simdb.entity.Work">
     update work
     <set>
       <if test="no != null">
-        no = #{no,jdbcType=REAL},
-      </if>
-      <if test="userId != null">
-        user_id = #{userId,jdbcType=INTEGER},
+        no = #{no,jdbcType=CHAR},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=INTEGER},
       </if>
+      <if test="origin != null">
+        origin = #{origin,jdbcType=CHAR},
+      </if>
       <if test="dueTime != null">
-        due_time = #{dueTime,jdbcType=TIMESTAMP},
+        due_time = #{dueTime,jdbcType=DATE},
+      </if>
+      <if test="dueTimeAlt != null">
+        due_time_alt = #{dueTimeAlt,jdbcType=CHAR},
       </if>
       <if test="finished != null">
         finished = #{finished,jdbcType=TINYINT},
@@ -290,30 +310,28 @@
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
-      <if test="origin != null">
-        origin = #{origin,jdbcType=LONGVARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yy.simdb.entity.WorkWithBLOBs">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yy.simdb.entity.Work">
     update work
-    set no = #{no,jdbcType=REAL},
-      user_id = #{userId,jdbcType=INTEGER},
+    set no = #{no,jdbcType=CHAR},
       type = #{type,jdbcType=INTEGER},
-      due_time = #{dueTime,jdbcType=TIMESTAMP},
+      origin = #{origin,jdbcType=CHAR},
+      due_time = #{dueTime,jdbcType=DATE},
+      due_time_alt = #{dueTimeAlt,jdbcType=CHAR},
       finished = #{finished,jdbcType=TINYINT},
       other = #{other,jdbcType=CHAR},
-      content = #{content,jdbcType=LONGVARCHAR},
-      origin = #{origin,jdbcType=LONGVARCHAR}
+      content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yy.simdb.entity.Work">
     update work
-    set no = #{no,jdbcType=REAL},
-      user_id = #{userId,jdbcType=INTEGER},
+    set no = #{no,jdbcType=CHAR},
       type = #{type,jdbcType=INTEGER},
-      due_time = #{dueTime,jdbcType=TIMESTAMP},
+      origin = #{origin,jdbcType=CHAR},
+      due_time = #{dueTime,jdbcType=DATE},
+      due_time_alt = #{dueTimeAlt,jdbcType=CHAR},
       finished = #{finished,jdbcType=TINYINT},
       other = #{other,jdbcType=CHAR}
     where id = #{id,jdbcType=INTEGER}

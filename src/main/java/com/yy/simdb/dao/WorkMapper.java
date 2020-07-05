@@ -2,7 +2,7 @@ package com.yy.simdb.dao;
 
 import com.yy.simdb.entity.Work;
 import com.yy.simdb.entity.WorkExample;
-import com.yy.simdb.entity.WorkWithBLOBs;
+import com.yy.simdb.entity.WorkSearch;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -14,25 +14,28 @@ public interface WorkMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(WorkWithBLOBs record);
+    int insert(Work record);
 
-    int insertSelective(WorkWithBLOBs record);
+    int insertSelective(Work record);
 
-    List<WorkWithBLOBs> selectByExampleWithBLOBs(WorkExample example);
+    List<Work> selectByExampleWithBLOBs(WorkExample example);
 
     List<Work> selectByExample(WorkExample example);
 
-    WorkWithBLOBs selectByPrimaryKey(Integer id);
+    Work selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") WorkWithBLOBs record, @Param("example") WorkExample example);
+    int updateByExampleSelective(@Param("record") Work record, @Param("example") WorkExample example);
 
-    int updateByExampleWithBLOBs(@Param("record") WorkWithBLOBs record, @Param("example") WorkExample example);
+    int updateByExampleWithBLOBs(@Param("record") Work record, @Param("example") WorkExample example);
 
     int updateByExample(@Param("record") Work record, @Param("example") WorkExample example);
 
-    int updateByPrimaryKeySelective(WorkWithBLOBs record);
+    int updateByPrimaryKeySelective(Work record);
 
-    int updateByPrimaryKeyWithBLOBs(WorkWithBLOBs record);
+    int updateByPrimaryKeyWithBLOBs(Work record);
 
     int updateByPrimaryKey(Work record);
+
+    List<Work> getAllWorkList(WorkSearch search);
+
 }

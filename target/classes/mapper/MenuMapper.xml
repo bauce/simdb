@@ -5,12 +5,19 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="CHAR" property="name" />
     <result column="icon" jdbcType="CHAR" property="icon" />
-    <result column="herf" jdbcType="CHAR" property="herf" />
+    <result column="href" jdbcType="CHAR" property="href" />
     <result column="perms" jdbcType="CHAR" property="perms" />
     <result column="spread" jdbcType="CHAR" property="spread" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
+
+
+  <select id="getMenuById" resultMap="BaseResultMap">
+    select * from menu
+    where id = #{menuId}
+  </select>
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -70,7 +77,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, icon, herf, perms, spread, parent_id, sort
+    id, name, icon, href, perms, spread, parent_id, sort
   </sql>
   <select id="selectByExample" parameterType="com.yy.simdb.entity.MenuExample" resultMap="BaseResultMap">
     select
@@ -103,10 +110,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.yy.simdb.entity.Menu">
-    insert into menu (id, name, icon, herf, 
+    insert into menu (id, name, icon, href,
       perms, spread, parent_id, 
       sort)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=CHAR}, #{icon,jdbcType=CHAR}, #{herf,jdbcType=CHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=CHAR}, #{icon,jdbcType=CHAR}, #{href,jdbcType=CHAR},
       #{perms,jdbcType=CHAR}, #{spread,jdbcType=CHAR}, #{parentId,jdbcType=INTEGER}, 
       #{sort,jdbcType=INTEGER})
   </insert>
@@ -122,8 +129,8 @@
       <if test="icon != null">
         icon,
       </if>
-      <if test="herf != null">
-        herf,
+      <if test="href != null">
+        href,
       </if>
       <if test="perms != null">
         perms,
@@ -148,8 +155,8 @@
       <if test="icon != null">
         #{icon,jdbcType=CHAR},
       </if>
-      <if test="herf != null">
-        #{herf,jdbcType=CHAR},
+      <if test="href != null">
+        #{href,jdbcType=CHAR},
       </if>
       <if test="perms != null">
         #{perms,jdbcType=CHAR},
@@ -183,8 +190,8 @@
       <if test="record.icon != null">
         icon = #{record.icon,jdbcType=CHAR},
       </if>
-      <if test="record.herf != null">
-        herf = #{record.herf,jdbcType=CHAR},
+      <if test="record.href != null">
+        href = #{record.href,jdbcType=CHAR},
       </if>
       <if test="record.perms != null">
         perms = #{record.perms,jdbcType=CHAR},
@@ -208,7 +215,7 @@
     set id = #{record.id,jdbcType=INTEGER},
       name = #{record.name,jdbcType=CHAR},
       icon = #{record.icon,jdbcType=CHAR},
-      herf = #{record.herf,jdbcType=CHAR},
+      href = #{record.href,jdbcType=CHAR},
       perms = #{record.perms,jdbcType=CHAR},
       spread = #{record.spread,jdbcType=CHAR},
       parent_id = #{record.parentId,jdbcType=INTEGER},
@@ -226,8 +233,8 @@
       <if test="icon != null">
         icon = #{icon,jdbcType=CHAR},
       </if>
-      <if test="herf != null">
-        herf = #{herf,jdbcType=CHAR},
+      <if test="href != null">
+        href = #{href,jdbcType=CHAR},
       </if>
       <if test="perms != null">
         perms = #{perms,jdbcType=CHAR},
@@ -248,7 +255,7 @@
     update menu
     set name = #{name,jdbcType=CHAR},
       icon = #{icon,jdbcType=CHAR},
-      herf = #{herf,jdbcType=CHAR},
+      href = #{href,jdbcType=CHAR},
       perms = #{perms,jdbcType=CHAR},
       spread = #{spread,jdbcType=CHAR},
       parent_id = #{parentId,jdbcType=INTEGER},
