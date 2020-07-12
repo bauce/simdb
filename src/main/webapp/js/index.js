@@ -13,11 +13,11 @@ layui.config({
 	});
 	
 	//退出
-	$(".signOut").click(function(){
+	$(".icon-loginout").click(function(){
 		window.sessionStorage.removeItem("menu");
 		menu = [];
 		window.sessionStorage.removeItem("curmenu");
-		parent.location.href = ctx+'/login';
+		parent.location.href = ctx+'/login.jsp';
 
 	})
 	

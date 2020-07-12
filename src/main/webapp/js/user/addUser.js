@@ -3,12 +3,8 @@
 			laypage = layui.laypage,laydate = layui.laydate,
 			$ = layui.jquery,
 			form = layui.form;
-			
-			laydate.render({
-				elem: '#birthday' // 指定元素
-				,max: 'new Date()'
-			});
-			
+
+
 			form.verify({ 
 				pass: [/(.+){6,16}$/, '密码必须6到16位']
 				,repass: function(value){
@@ -18,20 +14,21 @@
 					}
 				}
 			});
-			
+
 			$("#username").blur(function(){
 				$.ajax({
-		            type: "get",
-		            url: ctx+"/user/checkUserByUsername/"+$("#username").val(),
-		            success:function(data){
-		            	if(data.code!=0){
-		            		top.layer.msg(data.msg);
-		            		$("#username").val("");
-		            		$("#username").focus();
-		            	}
-		            }
-		        });
+					type: "get",
+					url: ctx+"/user/checkUserByUsername/"+$("#username").val(),
+					success:function(data){
+						if(data.code!=0){
+							top.layer.msg(data.msg);
+							$("#username").val("");
+							$("#username").focus();
+						}
+					}
+				});
 			});
+
 	
 
 	

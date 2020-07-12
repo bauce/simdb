@@ -22,6 +22,59 @@
     </where>
   </select>
 
+  <select id="getAllUserList" resultMap="BaseResultMap" parameterType="com.yy.simdb.entity.UserSearch">
+    select * from user
+    <where>
+      <if test="null != username and '' != username">
+        and username like "%"#{username}"%"
+      </if>
+      <if test="null != roleId and '' != roleId">
+        and role_id = #{roleId}
+      </if>
+    </where>
+  </select>
+
+
+  <update id="updateUser" parameterType="User">
+    update user 
+    <set>
+      <if test="null != username and '' != username">
+        username = #{username},
+      </if>
+      <if test="null != password and '' != password">
+        password = #{password},
+      </if>
+      <if test="null != phone and '' != phone">
+        phone = #{phone},
+      </if>
+      <if test="null != roleId and '' != roleId">
+        role_id = #{roleId},
+      </if>
+      <if test="null != email and '' != email">
+        email = #{email},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+
+  <delete id="deleteById">
+    delete from user
+    where id = #{id}
+  </delete>
+
+  <select id="getUserByUsername" resultType="java.lang.Integer">
+    select count(*) from user
+    where username =#{username}
+  </select>
+
+  <select id="getUserList" resultType="com.yy.simdb.entity.UserMini">
+    select id,username from user
+  </select>
+  <!--<insert id="insUser" parameterType="User">
+    insert into user (username,password,role_id,phone,email)
+    values (#{username},#{password},#{roleId},#{phone},#{email})
+  </insert>-->
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -212,7 +265,7 @@
       <if test="username != null">
         username = #{username,jdbcType=CHAR},
       </if>
-      <if test="password != null">
+      <if test="null != password and '' != password">
         password = #{password,jdbcType=CHAR},
       </if>
       <if test="roleId != null">

@@ -25,7 +25,7 @@
             <div class="layui-inline">
                 <div class="layui-input-inline">
                     <select name="type" id="type">
-                        <option value="-1">请选择</option>
+                        <option value="" disabled selected hidden>类型</option>
                         <option value="1">工作要点</option>
                         <option value="2">领导批示</option>
                         <option value="3">常委会议定</option>
@@ -33,14 +33,22 @@
                     </select>
                 </div>
                 <div class="layui-input-inline">
-                    <select name="status" id="status">
-                        <option value="0">未审核通过</option>
-                        <option value="1">已审核通过</option>
+                    <select name="finished" id="finished">
+                        <option value="" disabled selected hidden>状态</option>
+                        <option value="0">未完成</option>
+                        <option value="1">已完成</option>
                     </select>
                 </div>
+
+                <div class="layui-input-inline">
+                    <select  id="dp" name="userId" lay-filter="dp" disabled="disabled">
+                        <<option value="" disabled selected hidden>责任科室</option>
+                    </select>
+                </div>
+
                 <a style="margin-left: 10px" class="layui-btn search_btn" datatype="search" lay-filter="search">查询</a>
                 <div class="layui-inline" style="margin-left: 10px">
-                    <a class="layui-btn layui-btn-normal">添加工作</a>
+                    <a class="layui-btn layui-btn-normal addWork-btn">添加工作</a>
                 </div>
             </div>
         </form>
@@ -60,6 +68,17 @@
         {{#  } else if(d.finished == 1){}} 是
         {{#  } }}
     </script>
+    <script type="text/html" id="timeTpl">
+        {{#  if(null != d.dueTime){}} <div>{{ formatTime(d.dueTime,"yyyy-MM-dd")}}</div>
+        {{#  } else {}} <div>{{ d.dueTimeAlt}}</div>
+        {{#  } }}
+    </script>
+    <script type="text/html" id="userTpl">
+        {{#  layui.each(userList, function(index, item){ }}
+        {{#  if(d.userId == item.id){}} <div>{{  item.username}}</div>
+        {{#  } }}
+        {{#  }); }}
+    </script>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-sm" lay-event="edit">
             <i class="layui-icon">&#xe642;</i>
@@ -69,7 +88,7 @@
         </a>
     </script>
     <script type="text/javascript" src="${ctx }/layui/layui.js"></script>
-    <script type="text/javascript" src="${ctx }/js/work/allWorkList.js"></script>
+    <script type="text/javascript" src="${ctx }/js/work/listWork.js"></script>
 
 </body>
 </html>

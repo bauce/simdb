@@ -23,8 +23,11 @@
 				<a href="javascript:;" class="iconfont hideMenu icon-menu1"></a>
 				<!-- 顶部右侧菜单 -->
 				<ul class="layui-nav top_menu">
-					<li class="layui-nav-item"><a href="${ctx }/user/loginOut"
-						class="signOut"><i class="iconfont icon-loginout"></i><cite>退出</cite></a>
+					<li class="layui-nav-item"><%--<a href="${ctx }/user/loginOut"
+						class="signOut">--%>
+						<div class="layui-inline" >
+							<i class="iconfont icon-loginout"></i>
+						</div>
 					</li>
 				</ul>
 			</div>

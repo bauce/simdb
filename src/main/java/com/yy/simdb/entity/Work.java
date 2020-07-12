@@ -11,6 +11,10 @@ public class Work {
 
     private String origin;
 
+    private Integer userId;
+
+    private Date createTime;
+
     private Date dueTime;
 
     private String dueTimeAlt;
@@ -51,6 +55,22 @@ public class Work {
 
     public void setOrigin(String origin) {
         this.origin = origin == null ? null : origin.trim();
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Date getDueTime() {
@@ -103,6 +123,8 @@ public class Work {
         sb.append(", no=").append(no);
         sb.append(", type=").append(type);
         sb.append(", origin=").append(origin);
+        sb.append(", userId=").append(userId);
+        sb.append(", createTime=").append(createTime);
         sb.append(", dueTime=").append(dueTime);
         sb.append(", dueTimeAlt=").append(dueTimeAlt);
         sb.append(", finished=").append(finished);

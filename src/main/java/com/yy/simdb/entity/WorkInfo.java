@@ -7,6 +7,8 @@ public class WorkInfo {
 
     private Integer wid;
 
+    private Date createTime;
+
     private Integer status;
 
     private Byte finished;
@@ -33,6 +35,14 @@ public class WorkInfo {
 
     public void setWid(Integer wid) {
         this.wid = wid;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public Integer getStatus() {
@@ -91,6 +101,7 @@ public class WorkInfo {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", wid=").append(wid);
+        sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);
         sb.append(", finished=").append(finished);
         sb.append(", date=").append(date);

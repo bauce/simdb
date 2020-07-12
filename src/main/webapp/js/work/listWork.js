@@ -1,11 +1,34 @@
+var userList,fdata;
 layui.use([ 'form','layer','jquery','table','laydate'], function() {
     var layer = layui.layer, $ = layui.jquery, form = layui.form,table=layui.table,laydate = layui.laydate;
     var nowTime = new Date().valueOf();
     var max = null;
+
+    //获取用户名和id，装入下拉菜单，并存入全局变量
+    $.ajax({
+        type: "post",
+        url: ctx+"/user/getUserList",
+        async:false,
+        dataType:"json",
+        success:function(d){
+            if(0==d.code){
+                userList = d.data;
+                console.log(userList);
+                $.each(d.data, function(index, item) {
+                    $('#dp').append(new Option(item.username, item.id));
+                    $('#dp').removeAttr("disabled");
+                });
+                form.render("select");
+            }else {
+                layer.msg(d.message);
+            }
+        }}
+    );
+
     active = {
         search : function(){
-            var username = $('#username');
-            var sex = $('#sex option:selected');
+            var no = $('#no');
+            var type = $('#type option:selected');
             var status = $('#status option:selected');
             var roleId = $('#roleId option:selected');
             var createTimeStart = $('#createTimeStart');
@@ -35,13 +58,16 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         id:'allWorkList'
         ,elem: '#allWorkList'
         ,url: ctx+'/work/getAllWorkList'// 数据接口
+        ,toolbar : true
         ,limit:10// 每页默认数
         ,limits:[10,20,30,40]
         ,cols: [[ // 表头
             {field:'no',title:'编号',align:'center',width:60},
             {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:150},
             {field:'content',title:'督办内容',align:'center',width:400},
-            {field:'dueTime',title:'截止时间',align:'center',templet : '<div>{{ formatTime(d.dueTime,"yyyy-MM-dd")}}</div>',width:102},
+            {field:'origin',title:'督办依据',align:'center',width:150},
+            {field:'dueTime',title:'截止时间',align:'center',templet : '#timeTpl',width:102},
+            {field:'userId',title:'责任科室',align:'center',templet : '#userTpl',width:120},
             {field:'finished',title:'是否办结',align:'center',templet : '#doneTpl',width:87},
             {field: 'right', title: '操作', align: 'center', toolbar: "#barDemo",width:150}
         ]]
@@ -50,34 +76,14 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         ,where: {timestamp: (new Date()).valueOf()}
     });
 
-    form.on('switch(statusSwitch)', function(data){
-        var status = this.checked ? 1 : 0;
-        var id = this.value;
-        $.ajax({
-            url : ctx + '/user/updateUserStatusById',
-            type : "get",
-            data:{
-                status:status,
-                id:id
-            },
-            success : function(d) {
-                if (d.code == 0) {
-                    layer.msg("更新用户状态成功！");
-                } else {
-                    layer.msg("权限不足！", {
-                        icon : 5
-                    });
-                }
-            }
-        })
-    });
 
     table.on('tool(userList)', function (obj) {
         var data = obj.data;
+        console.log()
         if (obj.event === 'delete') {
-            layer.confirm('确定要删除 '+data.username+' 么？', function (index) {
+            layer.confirm('确定要删除么？', function (index) {
                 $.ajax({
-                    url : ctx + '/user/deleteUserById',
+                    url : ctx + '/user/deleteWorkById',
                     type : "POST",
                     data: {"id": data.id},
                     success : function(d) {
@@ -97,15 +103,17 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                 layer.close(index);
             });
         } else if (obj.event === 'edit') {
-            var editIndex = layer.open({
+            /*var editIndex = layer.open({
                 type : 2,
-                title : "编辑用户",
+                title : "编辑工作",
                 area : [ '450px', '600px' ],
                 content : ctx + "/user/editUser/" + data.id,
                 success : function(layero, index) {
-
+                    var body=layer.getChildFrame('body',index);
+                    body.contents().find("#")
                 }
-            });
+            });*/
+            console.log(fdata);
         }
     });
 
@@ -115,12 +123,12 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         active[type] ? active[type].call(this) : '';
     })
 
-    $(".userAdd_btn").click(function() {
+    $(".addWork-btn").click(function() {
         var addIndex = layer.open({
-            title : "添加用户",
+            title : "添加工作",
             type : 2,
             area : [ '800px', '550px' ],
-            content : ctx + "/user/addUser",
+            content : ctx + "/work/addWork",
             success : function(layero, index) {
 
             }

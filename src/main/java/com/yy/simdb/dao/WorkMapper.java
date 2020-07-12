@@ -8,6 +8,11 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface WorkMapper {
+
+    List<Work> getAllWorkList(WorkSearch search);
+
+    int queryByContent(String content);
+
     long countByExample(WorkExample example);
 
     int deleteByExample(WorkExample example);
@@ -35,7 +40,4 @@ public interface WorkMapper {
     int updateByPrimaryKeyWithBLOBs(Work record);
 
     int updateByPrimaryKey(Work record);
-
-    List<Work> getAllWorkList(WorkSearch search);
-
 }

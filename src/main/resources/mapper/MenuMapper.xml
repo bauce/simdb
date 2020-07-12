@@ -12,7 +12,6 @@
     <result column="sort" jdbcType="INTEGER" property="sort" />
   </resultMap>
 
-
   <select id="getMenuById" resultMap="BaseResultMap">
     select * from menu
     where id = #{menuId}
@@ -262,4 +261,18 @@
       sort = #{sort,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="getAllUserList" resultMap="BaseResultMap" parameterType="com.yy.simdb.entity.UserSearch">
+    select * from user
+    <where>
+      <if test="null != id and '' != id">
+        and id = #{id}
+      </if>
+      <if test="null != username and ''!= username">
+        and username like '%${username}%'
+      </if>
+      <if test="null != roleId and '' != roleId">
+        and roleId = #{roleId}
+      </if>
+    </where>
+  </select>
 </mapper>

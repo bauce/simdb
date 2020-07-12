@@ -6,6 +6,8 @@
     <result column="no" jdbcType="CHAR" property="no" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="origin" jdbcType="CHAR" property="origin" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
     <result column="due_time" jdbcType="DATE" property="dueTime" />
     <result column="due_time_alt" jdbcType="CHAR" property="dueTimeAlt" />
     <result column="finished" jdbcType="TINYINT" property="finished" />
@@ -14,7 +16,8 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yy.simdb.entity.Work">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
-  <select id="getAllWorkList" resultMap="ResultMapWithBLOBs">
+
+  <select id="getAllWorkList" resultMap="ResultMapWithBLOBs" parameterType="com.yy.simdb.entity.WorkSearch">
     select * from work
     <where>
       <if test="type != null and '' != type">
@@ -23,13 +26,30 @@
       <if test="no != null and ''!=no">
         and no = #{no}
       </if>
+      <if test="userId != null and ''!=userId">
+        and user_id = #{userId}
+      </if>
+      <if test="originKey != null and ''!=originKey">
+        and origin like "%"#{originKey}"%"
+      </if>
+      <if test="contentKey != null and ''!=contentKey">
+        and content like "%"#{contentKey}"%"
+      </if>
+      <if test="dueTime !=null and '' != dueTime">
+        and due_time_ = #{dueTime}
+      </if>
       <if test="dueTimeAlt !=null and '' != dueTimeAlt">
-        and dueTimeAlt like '%${dueTimeAlt}%'
+        and due_time_alt like '%#{dueTimeAlt}%'
       </if>
       <if test="finished != null and ''!= finished">
         and finished = #{finished}
       </if>
     </where>
+    order by id asc
+  </select>
+
+  <select id="queryByContent" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select count(*) where content = #{content}
   </select>
 
   <sql id="Example_Where_Clause">
@@ -91,7 +111,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, no, type, origin, due_time, due_time_alt, finished, other
+    id, no, type, origin, user_id, create_time, due_time, due_time_alt, finished, other
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -146,11 +166,13 @@
   </delete>
   <insert id="insert" parameterType="com.yy.simdb.entity.Work">
     insert into work (id, no, type, origin, 
-      due_time, due_time_alt, finished, 
-      other, content)
+      user_id, create_time, due_time, 
+      due_time_alt, finished, other, 
+      content)
     values (#{id,jdbcType=INTEGER}, #{no,jdbcType=CHAR}, #{type,jdbcType=INTEGER}, #{origin,jdbcType=CHAR}, 
-      #{dueTime,jdbcType=DATE}, #{dueTimeAlt,jdbcType=CHAR}, #{finished,jdbcType=TINYINT}, 
-      #{other,jdbcType=CHAR}, #{content,jdbcType=LONGVARCHAR})
+      #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{dueTime,jdbcType=DATE}, 
+      #{dueTimeAlt,jdbcType=CHAR}, #{finished,jdbcType=TINYINT}, #{other,jdbcType=CHAR}, 
+      #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yy.simdb.entity.Work">
     insert into work
@@ -166,6 +188,12 @@
       </if>
       <if test="origin != null">
         origin,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
       </if>
       <if test="dueTime != null">
         due_time,
@@ -195,6 +223,12 @@
       </if>
       <if test="origin != null">
         #{origin,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
       </if>
       <if test="dueTime != null">
         #{dueTime,jdbcType=DATE},
@@ -234,6 +268,12 @@
       <if test="record.origin != null">
         origin = #{record.origin,jdbcType=CHAR},
       </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=DATE},
+      </if>
       <if test="record.dueTime != null">
         due_time = #{record.dueTime,jdbcType=DATE},
       </if>
@@ -260,6 +300,8 @@
       no = #{record.no,jdbcType=CHAR},
       type = #{record.type,jdbcType=INTEGER},
       origin = #{record.origin,jdbcType=CHAR},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=DATE},
       due_time = #{record.dueTime,jdbcType=DATE},
       due_time_alt = #{record.dueTimeAlt,jdbcType=CHAR},
       finished = #{record.finished,jdbcType=TINYINT},
@@ -275,6 +317,8 @@
       no = #{record.no,jdbcType=CHAR},
       type = #{record.type,jdbcType=INTEGER},
       origin = #{record.origin,jdbcType=CHAR},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=DATE},
       due_time = #{record.dueTime,jdbcType=DATE},
       due_time_alt = #{record.dueTimeAlt,jdbcType=CHAR},
       finished = #{record.finished,jdbcType=TINYINT},
@@ -294,6 +338,12 @@
       </if>
       <if test="origin != null">
         origin = #{origin,jdbcType=CHAR},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=DATE},
       </if>
       <if test="dueTime != null">
         due_time = #{dueTime,jdbcType=DATE},
@@ -318,6 +368,8 @@
     set no = #{no,jdbcType=CHAR},
       type = #{type,jdbcType=INTEGER},
       origin = #{origin,jdbcType=CHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=DATE},
       due_time = #{dueTime,jdbcType=DATE},
       due_time_alt = #{dueTimeAlt,jdbcType=CHAR},
       finished = #{finished,jdbcType=TINYINT},
@@ -330,6 +382,8 @@
     set no = #{no,jdbcType=CHAR},
       type = #{type,jdbcType=INTEGER},
       origin = #{origin,jdbcType=CHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=DATE},
       due_time = #{dueTime,jdbcType=DATE},
       due_time_alt = #{dueTimeAlt,jdbcType=CHAR},
       finished = #{finished,jdbcType=TINYINT},

@@ -1,13 +1,14 @@
 package com.yy.simdb.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yy.simdb.dao.MenuMapper;
 import com.yy.simdb.dao.RoleMapper;
 import com.yy.simdb.dao.RoleMenuMapper;
 import com.yy.simdb.dao.UserMapper;
-import com.yy.simdb.entity.Menu;
-import com.yy.simdb.entity.RoleMenu;
-import com.yy.simdb.entity.User;
+import com.yy.simdb.entity.*;
 import com.yy.simdb.service.UserService;
+import com.yy.simdb.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,4 +73,49 @@ public class UserServiceImpl implements UserService {
         }
         return menuList;
     }
+
+    @Override
+    public ResultUtil getAllUerList(Integer page, Integer limit, UserSearch search) {
+        PageHelper.startPage(page,limit);
+        List<User> users =userMapper.getAllUserList(search);
+        PageInfo<User> pageInfo = new PageInfo<>(users);
+        ResultUtil resultUtil = new ResultUtil();
+        resultUtil.setCode(0);
+        resultUtil.setCount(pageInfo.getTotal());
+        resultUtil.setData(pageInfo.getList());
+        return resultUtil;
+    }
+
+    @Override
+    public User getUserById(int id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public int getUserByUsername(String name) {
+        return userMapper.getUserByUsername(name);
+    }
+
+    @Override
+    public int insertUer(User user) {
+        return userMapper.insert(user);
+    }
+
+    @Override
+    public int deleteUserByid(int id) {
+        return userMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int updateUser(User user) {
+        System.err.println(user.getPassword());
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public List<UserMini> getUserList() {
+        return userMapper.getUserList();
+    }
+
+
 }

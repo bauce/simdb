@@ -21,11 +21,16 @@ public class UserServiceImplTest {
 
     @Test
     public void login() {
-        userService.login("办公室","111111");
+        userService.login("办公室","111");
     }
 
     @Test
     public void testListWork(){
         workService.getAllWorklist(1,10,null);
+    }
+
+    @Test
+    public void  testUserMini(){
+        System.out.println(userService.getUserList());
     }
 }

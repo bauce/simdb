@@ -87,3 +87,8 @@ h2 {
 	margin-right: 30px;
 	vertical-align: middle;
 }
+
+.iconfont.icon-loginout.layui-btn{
+	display: inline-block;
+	vertical-align: middle;
+}

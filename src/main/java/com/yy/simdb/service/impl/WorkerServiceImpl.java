@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class WorkerServiceImpl implements WorkService {
+public  class WorkerServiceImpl implements WorkService {
 
     @Autowired
     private WorkMapper workMapper;
@@ -30,5 +30,52 @@ public class WorkerServiceImpl implements WorkService {
         resultUtil.setCount(pageInfo.getTotal());
         resultUtil.setData(pageInfo.getList());
         return resultUtil;
+    }
+
+    @Override
+    public ResultUtil deleteWorkByid(int id) {
+        int dc = workMapper.deleteByPrimaryKey(id);
+        ResultUtil resultUtil = new ResultUtil();
+        if (dc != 0){
+            resultUtil.setCode(0);
+            return resultUtil;
+        }else{
+            resultUtil.setCode(500);
+            resultUtil.setMsg("删除失败");
+            return resultUtil;
+        }
+    }
+
+    @Override
+    public ResultUtil inserWork(Work work) {
+        int ic = workMapper.insertSelective(work);
+        ResultUtil resultUtil = new ResultUtil();
+        if (ic != 0){
+            resultUtil.setCode(0);
+            return resultUtil;
+        }else{
+            resultUtil.setCode(500);
+            resultUtil.setMsg("添加失败");
+            return resultUtil;
+        }
+    }
+
+    @Override
+    public ResultUtil updateWork(Work work) {
+        int uc = workMapper.updateByPrimaryKeySelective(work);
+        ResultUtil resultUtil = new ResultUtil();
+        if (uc != 0){
+            resultUtil.setCode(0);
+            return resultUtil;
+        }else{
+            resultUtil.setCode(500);
+            resultUtil.setMsg("更新失败");
+            return resultUtil;
+        }
+    }
+
+    @Override
+    public int queryByContent(String content) {
+        return workMapper.queryByContent(content);
     }
 }

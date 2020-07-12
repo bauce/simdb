@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.yy.simdb.entity.WorkInfo">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="wid" jdbcType="INTEGER" property="wid" />
+    <result column="create_time" jdbcType="DATE" property="createTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="finished" jdbcType="TINYINT" property="finished" />
     <result column="date" jdbcType="DATE" property="date" />
@@ -72,7 +73,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, wid, status, finished, date, bgs_comment, modify_time
+    id, wid, create_time, status, finished, date, bgs_comment, modify_time
   </sql>
   <sql id="Blob_Column_List">
     info
@@ -126,12 +127,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.yy.simdb.entity.WorkInfo">
-    insert into work_info (id, wid, status, 
-      finished, date, bgs_comment, 
-      modify_time, info)
-    values (#{id,jdbcType=INTEGER}, #{wid,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{finished,jdbcType=TINYINT}, #{date,jdbcType=DATE}, #{bgsComment,jdbcType=CHAR}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{info,jdbcType=LONGVARCHAR})
+    insert into work_info (id, wid, create_time, 
+      status, finished, date, 
+      bgs_comment, modify_time, info
+      )
+    values (#{id,jdbcType=INTEGER}, #{wid,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, 
+      #{status,jdbcType=INTEGER}, #{finished,jdbcType=TINYINT}, #{date,jdbcType=DATE}, 
+      #{bgsComment,jdbcType=CHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{info,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.yy.simdb.entity.WorkInfo">
     insert into work_info
@@ -141,6 +144,9 @@
       </if>
       <if test="wid != null">
         wid,
+      </if>
+      <if test="createTime != null">
+        create_time,
       </if>
       <if test="status != null">
         status,
@@ -167,6 +173,9 @@
       </if>
       <if test="wid != null">
         #{wid,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -203,6 +212,9 @@
       <if test="record.wid != null">
         wid = #{record.wid,jdbcType=INTEGER},
       </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=DATE},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
@@ -230,6 +242,7 @@
     update work_info
     set id = #{record.id,jdbcType=INTEGER},
       wid = #{record.wid,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=DATE},
       status = #{record.status,jdbcType=INTEGER},
       finished = #{record.finished,jdbcType=TINYINT},
       date = #{record.date,jdbcType=DATE},
@@ -244,6 +257,7 @@
     update work_info
     set id = #{record.id,jdbcType=INTEGER},
       wid = #{record.wid,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=DATE},
       status = #{record.status,jdbcType=INTEGER},
       finished = #{record.finished,jdbcType=TINYINT},
       date = #{record.date,jdbcType=DATE},
@@ -258,6 +272,9 @@
     <set>
       <if test="wid != null">
         wid = #{wid,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=DATE},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
@@ -283,6 +300,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yy.simdb.entity.WorkInfo">
     update work_info
     set wid = #{wid,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=DATE},
       status = #{status,jdbcType=INTEGER},
       finished = #{finished,jdbcType=TINYINT},
       date = #{date,jdbcType=DATE},
@@ -294,6 +312,7 @@
   <update id="updateByPrimaryKey" parameterType="com.yy.simdb.entity.WorkInfo">
     update work_info
     set wid = #{wid,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=DATE},
       status = #{status,jdbcType=INTEGER},
       finished = #{finished,jdbcType=TINYINT},
       date = #{date,jdbcType=DATE},
