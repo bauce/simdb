@@ -5,9 +5,9 @@
   Time: 17:38
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/page/include/taglib.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -46,15 +46,16 @@
                     </select>
                 </div>
 
-                <a style="margin-left: 10px" class="layui-btn search_btn" datatype="search" lay-filter="search">查询</a>
+                <a style="margin-left: 10px" class="layui-btn search_btn" lay-submit="" data-type="search"
+                   lay-filter="search">查询</a>
                 <div class="layui-inline" style="margin-left: 10px">
-                    <a class="layui-btn layui-btn-normal addWork-btn">添加工作</a>
+                    <a class="layui-btn layui-btn-normal addWork_btn">添加工作</a>
                 </div>
             </div>
         </form>
     </blockquote>
     <div class="layui-form">
-        <table id="allWorkList" lay-filter="allWorkList"></table>
+        <table id="workList" lay-filter="workList"></table>
     </div>
     <script type="text/html" id="typeTpl">
         {{#  if(d.type == 1){}} 工作要点
@@ -74,8 +75,8 @@
         {{#  } }}
     </script>
     <script type="text/html" id="userTpl">
-        {{#  layui.each(userList, function(index, item){ }}
-        {{#  if(d.userId == item.id){}} <div>{{  item.username}}</div>
+        {{#  layui.each(userListData, function(index, item){ }}
+        {{#  if(d.userId == item.userId){}} <div>{{  item.username}}</div>
         {{#  } }}
         {{#  }); }}
     </script>

@@ -1,9 +1,6 @@
 package com.yy.simdb.dao;
 
-import com.yy.simdb.entity.User;
-import com.yy.simdb.entity.UserExample;
-import com.yy.simdb.entity.UserMini;
-import com.yy.simdb.entity.UserSearch;
+import com.yy.simdb.entity.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -43,4 +40,6 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    User getUserByUserId(int id);
 }

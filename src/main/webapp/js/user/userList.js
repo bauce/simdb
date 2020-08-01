@@ -1,6 +1,16 @@
 ﻿var fdata;
 layui.use([ 'form','layer','jquery','table','laydate'], function() {
 	var layer = layui.layer, $ = layui.jquery, form = layui.form,table=layui.table,laydate = layui.laydate;
+
+	$("body").on('click','.layui-table-body tr ',function () {
+		console.log(this);
+		var data_index=$(this).attr('data-index');//得到当前的tr的index
+		console.log($(this).attr('data-index'));
+		$(".layui-table-body tr").attr({"style":"background:#FFFFFF"});//其他tr恢复颜色
+		$(".layui-table-body tr[data-index="+data_index+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
+
+	});
+
 	active = {
 			search : function(){
 			var username = $('#username');
@@ -27,6 +37,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
 		,toolbar : true
 	    ,cols: [[ // 表头
 	      {field:'username', title: '登录名', align: 'center',width:110}
+	      ,{field:'roleId', title: '角色', align: 'center',templet : '#userTpl',width:100}
           ,{field:'phone', title: '电话', align: 'center' ,width:120}
           ,{field:'email', title: 'E-mail' , align: 'center',width:180}
           , {fixed: 'right', title: '操作', align: 'center', toolbar: "#barDemo",width:150}
@@ -43,9 +54,9 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
 	    if (obj.event === 'delete') {
 	        layer.confirm('确定要删除 '+data.username+' 么？', function (index) {
 	        	$.ajax({
-					url : ctx + '/user/deleteUserByid',
+					url : ctx + '/user/deleteUserById',
 					type : "POST",
-					data: {"id": data.id},
+					data: {"id": data.userId},
 					success : function(d) {
 						if (d.code == 0) {
 							layer.msg("删除成功！",{icon: 1});
@@ -66,8 +77,8 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
 	    	var editIndex = layer.open({
 				type : 2,
 				title : "编辑用户",
-				area : [ '450px', '600px' ],
-				content : ctx + "/user/editUser/" + data.id,
+				area : [ '450px', '500px' ],
+				content : ctx + "/user/editUser/" + data.userId,
 				success : function(layero, index) {
 					var body = layui.layer.getChildFrame('body', index);
 				}
@@ -82,15 +93,15 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
 		console.log(type);
 		active[type] ? active[type].call(this) : '';
 	});
-	
+
+
 	$(".userAdd_btn").click(function() {
 		var addIndex = layer.open({
 			title : "添加用户",
 			type : 2,
-			area : [ '800px', '350px' ],
+			area : [ '800px', '380px' ],
 			content : ctx + "/user/addUser",
 			success : function(layero, index) {
-
 			}
 		})
 	})

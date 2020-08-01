@@ -8,6 +8,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/page/include/taglib.jsp"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -40,6 +41,15 @@
         <table id="userList" lay-filter="userList"></table>
     </div>
 
+
+    <script type="text/html" id="userTpl">
+        {{#  if(d.roleId == 1){}} 管理员
+        {{#  } else if(d.roleId == 2){}} 业务科室
+        {{#  } else if(d.roleId == 3){}} 派驻纪检监察组
+        {{#  } else if(d.roleId == 4){}} 镇（街道）纪（工）委
+        {{#  } else if(d.roleId == 5){}} 委领导
+        {{#  } }}
+    </script>
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-sm" lay-event="edit">
             <i class="layui-icon">&#xe642;</i>

@@ -1,7 +1,9 @@
 package com.yy.simdb.entity;
 
+import java.util.List;
+
 public class User {
-    private Integer id;
+    private Integer userId;
 
     private String username;
 
@@ -13,12 +15,14 @@ public class User {
 
     private String email;
 
-    public Integer getId() {
-        return id;
+    private List<Work> works;
+
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -67,13 +71,22 @@ public class User {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
+        sb.append(", UserId=").append(userId);
         sb.append(", username=").append(username);
         sb.append(", password=").append(password);
         sb.append(", roleId=").append(roleId);
         sb.append(", phone=").append(phone);
         sb.append(", email=").append(email);
         sb.append("]");
+
         return sb.toString();
+    }
+
+    public List<Work> getWorks() {
+        return works;
+    }
+
+    public void setWorks(List<Work> works) {
+        this.works = works;
     }
 }

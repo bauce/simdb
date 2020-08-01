@@ -2,6 +2,7 @@ package com.yy.simdb.dao;
 
 import com.yy.simdb.entity.Work;
 import com.yy.simdb.entity.WorkExample;
+import com.yy.simdb.entity.WorkInfoSearch;
 import com.yy.simdb.entity.WorkSearch;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,6 +24,16 @@ public interface WorkMapper {
 
     int insertSelective(Work record);
 
+    List<Integer> getUnfinishWorkIds();
+
+    Work getWorkById(int id);
+
+    List<Work> getWorkByUserId(int id);
+
+    List<Work> getWorkWithLastInfo(WorkInfoSearch infoSearch);
+
+    /******************以下为自动生成的*******************/
+
     List<Work> selectByExampleWithBLOBs(WorkExample example);
 
     List<Work> selectByExample(WorkExample example);
@@ -40,4 +51,5 @@ public interface WorkMapper {
     int updateByPrimaryKeyWithBLOBs(Work record);
 
     int updateByPrimaryKey(Work record);
+
 }

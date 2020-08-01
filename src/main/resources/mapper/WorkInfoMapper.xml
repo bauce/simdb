@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yy.simdb.dao.WorkInfoMapper">
   <resultMap id="BaseResultMap" type="com.yy.simdb.entity.WorkInfo">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="work_info_id" jdbcType="INTEGER" property="workInfoId" />
     <result column="wid" jdbcType="INTEGER" property="wid" />
     <result column="create_time" jdbcType="DATE" property="createTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -14,6 +14,196 @@
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yy.simdb.entity.WorkInfo">
     <result column="info" jdbcType="LONGVARCHAR" property="info" />
   </resultMap>
+
+  <resultMap extends="ResultMapWithBLOBs" id="workInfo" type="com.yy.simdb.entity.WorkInfo">
+    <association property="work" javaType="Work">
+      <id column="work_id" jdbcType="INTEGER" property="workId" />
+      <result column="no" jdbcType="CHAR" property="no" />
+      <result column="type" jdbcType="INTEGER" property="type" />
+      <result column="origin" jdbcType="CHAR" property="origin" />
+      <result column="user_id" jdbcType="INTEGER" property="userId" />
+      <result column="w_create_time" jdbcType="DATE" property="createTime" />
+      <result column="due_time" jdbcType="DATE" property="dueTime" />
+      <result column="due_time_alt" jdbcType="CHAR" property="dueTimeAlt" />
+      <result column="w_finished" jdbcType="TINYINT" property="finished" />
+      <result column="finish_time" jdbcType="DATE" property="finishTime" />
+      <result column="other" jdbcType="CHAR" property="other" />
+    </association>
+  </resultMap>
+
+  <select id="getInfoByWorkId" parameterType="int" resultMap="workInfo">
+    select
+    wi.*,
+    w.work_id,
+    w.no,
+    w.type ,
+    w.content,
+    w.origin,
+    w.user_id,
+    w.create_time as w_create_time,
+    w.due_time,
+    w.due_time_alt,
+    w.finished as w_finished,
+    w.finish_time,
+    w.other
+    from
+    work w,
+    work_info wi
+    where w.work_id = wi.wid and wid = #{id} and wi.status &lt; 3
+  </select>
+
+  <resultMap extends="ResultMapWithBLOBs" id="InfoWithWork" type="com.yy.simdb.entity.WorkInfo">
+    <association property="work" javaType="Work">
+      <id column="work_id" jdbcType="INTEGER" property="workId" />
+      <result column="no" jdbcType="CHAR" property="no" />
+      <result column="type" jdbcType="INTEGER" property="type" />
+      <result column="content" jdbcType="LONGVARCHAR" property="content" />
+      <result column="origin" jdbcType="CHAR" property="origin" />
+      <result column="user_id" jdbcType="INTEGER" property="userId" />
+      <result column="w_create_time" jdbcType="DATE" property="createTime" />
+      <result column="due_time" jdbcType="DATE" property="dueTime" />
+      <result column="due_time_alt" jdbcType="CHAR" property="dueTimeAlt" />
+      <result column="w_finished" jdbcType="TINYINT" property="finished" />
+      <result column="finish_time" jdbcType="DATE" property="finishTime" />
+      <result column="other" jdbcType="CHAR" property="other" />
+    </association>
+  </resultMap>
+
+  <select id="getLastInfoWithWork" resultMap="InfoWithWork" parameterType="com.yy.simdb.entity.WorkInfoSearch">
+    SELECT * FROM
+    (SELECT
+    wi.*,
+    w.work_id,
+    w.no,w.type,
+    w.content,
+    w.origin,
+    w.user_id,
+    w.create_time as w_create_time,
+    w.due_time,
+    w.due_time_alt,
+    w.finished as w_finished,
+    w.finish_time,
+    w.other
+    from
+    work w
+    LEFT OUTER JOIN work_info wi on wi.wid =w.work_id
+    <where>
+      <if test="null != userId and '' != userId">
+        and user_id = #{userId}
+      </if>
+      <if test="null != workId and '' !=  workId">
+        and work_id = #{workId}
+      </if>
+      <if test="null != status and '' !=  status">
+        and status = #{status}
+      </if>
+      <if test="null != type and '' !=  type">
+        and type = #{type}
+      </if>
+      <if test="originKey != null and '' !=  originKey">
+        and origin like "%"#{originKey}"%"
+      </if>
+      <if test="contentKey != null and '' != contentKey">
+        and content like "%"#{contentKey}"%"
+      </if>
+      <if test="dueTime !=null and '' != dueTime">
+        and due_time_ = #{dueTime}
+      </if>
+      <if test="dueTimeAlt !=null and '' != dueTimeAlt">
+        and due_time_alt like "%"#{dueTimeAlt}"%"
+      </if>
+      <if test="finished !=null and '' != finished">
+        and w.finished = #{finished}
+      </if>
+    </where>
+    ORDER BY wi.create_time DESC limit 10000000000) a
+    GROUP BY work_id
+  </select>
+
+
+
+  <select id="getLastInfoByWorkId" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select * from
+    (select *
+       from work_info
+        <where>
+          <if test="null != wid and '' !=  wid">
+            and wid = #{wid}
+          </if>
+        </where>
+        ORDER BY create_time DESC limit 10000000000) a
+    GROUP BY wid
+  </select>
+
+  <select id="getInfoByUserId" parameterType="int" resultMap="workInfo">
+    select
+    wi.*,
+    w.work_id,
+    w.no,
+    w.type ,
+    w.content,
+    w.origin,
+    w.user_id,
+    w.create_time as w_create_time,
+    w.due_time,
+    w.due_time_alt,
+    w.finished as w_finished,
+    w.finish_time,
+    w.other
+    from
+    work w,
+    work_info wi
+    where w.work_id = wi.wid and w.user_id = #{id} and wi.status &lt; 3
+  </select>
+
+  <insert id="insetAInfoByWid" parameterType="int">
+    insert into work_info(wid,create_time,status)
+    values
+      (#{wid},NOW(),0)
+  </insert>
+
+  <insert id="insertInfoListByWids" parameterType="java.util.List">
+    insert into work_info(wid,create_time,status)
+    values
+    <foreach collection="list" index="index" item="item" separator=",">
+      (#{item},NOW(),0)
+    </foreach>
+  </insert>
+
+  <select id="getInfoList" resultMap="workInfo" parameterType="com.yy.simdb.entity.WorkInfoSearch">
+    select
+    wi.*,
+    w.work_id,
+    w.no,
+    w.type ,
+    w.content,
+    w.origin,
+    w.user_id,
+    w.create_time as w_create_time,
+    w.due_time,
+    w.due_time_alt,
+    w.finished as w_finished,
+    w.finish_time,
+    w.other
+    from
+    work w,
+    work_info wi
+    where w.work_id = wi.wid
+    <if test="userId != null and '' != userId">
+      and w.user_id = #{userId}
+    </if>
+    <if test="status != null and '' != status and status &lt; 3">
+      and wi.status = #{status}
+    </if>
+    <if test="status != null and '' != status and status &gt; 3">
+      and wi.status &lt; 3
+    </if>
+    <if test="type != null and '' != type">
+      and w.type = #{type}
+    </if>
+  </select>
+
+
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -73,7 +263,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, wid, create_time, status, finished, date, bgs_comment, modify_time
+    work_info_id, wid, create_time, status, finished, date, bgs_comment, modify_time
   </sql>
   <sql id="Blob_Column_List">
     info
@@ -114,11 +304,11 @@
     ,
     <include refid="Blob_Column_List" />
     from work_info
-    where id = #{id,jdbcType=INTEGER}
+    where work_info_id = #{workInfoId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from work_info
-    where id = #{id,jdbcType=INTEGER}
+    where work_info_id = #{workInfoId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.yy.simdb.entity.WorkInfoExample">
     delete from work_info
@@ -127,20 +317,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.yy.simdb.entity.WorkInfo">
-    insert into work_info (id, wid, create_time, 
+    insert into work_info (work_info_id, wid, create_time, 
       status, finished, date, 
       bgs_comment, modify_time, info
       )
-    values (#{id,jdbcType=INTEGER}, #{wid,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, 
+    values (#{workInfoId,jdbcType=INTEGER}, #{wid,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, 
       #{status,jdbcType=INTEGER}, #{finished,jdbcType=TINYINT}, #{date,jdbcType=DATE}, 
       #{bgsComment,jdbcType=CHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{info,jdbcType=LONGVARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.yy.simdb.entity.WorkInfo">
+  <insert id="insertSelective" parameterType="com.yy.simdb.entity.WorkInfo"
+          useGeneratedKeys="true" keyProperty="work_info_id">
     insert into work_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
+      <if test="workInfoId != null">
+        work_info_id,
       </if>
       <if test="wid != null">
         wid,
@@ -168,8 +359,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
+      <if test="workInfoId != null">
+        #{workInfoId,jdbcType=INTEGER},
       </if>
       <if test="wid != null">
         #{wid,jdbcType=INTEGER},
@@ -206,8 +397,8 @@
   <update id="updateByExampleSelective" parameterType="map">
     update work_info
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="record.workInfoId != null">
+        work_info_id = #{record.workInfoId,jdbcType=INTEGER},
       </if>
       <if test="record.wid != null">
         wid = #{record.wid,jdbcType=INTEGER},
@@ -240,7 +431,7 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update work_info
-    set id = #{record.id,jdbcType=INTEGER},
+    set work_info_id = #{record.workInfoId,jdbcType=INTEGER},
       wid = #{record.wid,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=DATE},
       status = #{record.status,jdbcType=INTEGER},
@@ -255,7 +446,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update work_info
-    set id = #{record.id,jdbcType=INTEGER},
+    set work_info_id = #{record.workInfoId,jdbcType=INTEGER},
       wid = #{record.wid,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=DATE},
       status = #{record.status,jdbcType=INTEGER},
@@ -295,7 +486,7 @@
         info = #{info,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where work_info_id = #{workInfoId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yy.simdb.entity.WorkInfo">
     update work_info
@@ -307,7 +498,7 @@
       bgs_comment = #{bgsComment,jdbcType=CHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       info = #{info,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where work_info_id = #{workInfoId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yy.simdb.entity.WorkInfo">
     update work_info
@@ -318,6 +509,6 @@
       date = #{date,jdbcType=DATE},
       bgs_comment = #{bgsComment,jdbcType=CHAR},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=INTEGER}
+    where work_info_id = #{workInfoId,jdbcType=INTEGER}
   </update>
 </mapper>

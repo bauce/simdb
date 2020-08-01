@@ -35,6 +35,7 @@ layui.use([ 'element', 'layer'], function(exports) {
                         if(result.code == 0){
                             console.log(result);
                             parent.location.href = ctx+'/user/index';
+                            window.sessionStorage.setItem("userId",result.data);
                             close_wait(i);
                         }else if(result.code != 0){
                             layer.msg('用户名或密码错误', {icon:5, shade:[0.5, '#000000'], shadeClose:true});
@@ -43,7 +44,6 @@ layui.use([ 'element', 'layer'], function(exports) {
                     },
                     error:function(){
                         layer.alert("获取数据失败！");
-                        draw(show_num);
                     }
                 });
                 $("#username").val('');

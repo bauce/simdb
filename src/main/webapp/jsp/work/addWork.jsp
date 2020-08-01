@@ -18,7 +18,7 @@
 </head>
 <body>
     <br>
-    <form class="layui-form" style="width: 80%;" id="auf">
+    <form class="layui-form" style="width: 94%;margin: 0px auto" id="auf">
         <div class="layui-form-item">
             <label class="layui-form-label">编号</label>
             <div class="layui-input-inline">
@@ -28,7 +28,7 @@
             <label class="layui-form-label">工作类型</label>
             <div class="layui-input-inline">
                 <select name="type" id="type">
-                    <option value="-1">请选择</option>
+                    <option value="" disabled selected hidden>类型</option>
                     <option value="1">工作要点</option>
                     <option value="2">领导批示</option>
                     <option value="3">常委会议定</option>
@@ -47,7 +47,7 @@
             <div class="layui-input-inline">
                     <%--<div class="layui-input-inline" id="demo1"></div>--%>
                     <select  id="dp" name="userId" lay-filter="dp" disabled="disabled">
-                        <option value="-1">请选择</option>
+                        <option value="" disabled selected hidden>责任科室</option>
                     </select>
             </div>
         </div>
@@ -70,9 +70,9 @@
         <div class="layui-form-item selectTime">
             <label class="layui-form-label">办结时限</label>
             <div class="layui-input-inline">
-                <input type="text" id="dueTime" class="layui-input" autocomplete="off"
+                <input type="text" name="dueTime" class="layui-input dueTime" autocomplete="off"
                        placeholder="请选择报办结时限">
-                <input type="text"  id="dueTimeAlt" class="layui-input" autocomplete="off"
+                <input type="text"  name="dueTimeAlt" class="layui-input dueTimeAlt" autocomplete="off"
                        placeholder="请输入办结时限" value="" style="display:none">
             </div>
         </div>

@@ -9,23 +9,23 @@ layui.config({
         form = layui.form;
 
     form.on("radio(time)",function(data){
-        $("#dueTime").toggle();
-        $("#dueTimeAlt").toggle();
-        $("#dueTime").val('');
-        $("#dueTimeAlt").val('');
+        $(".dueTime").toggle();
+        $(".dueTimeAlt").toggle();
+        $(".dueTime").val('');
+        $(".dueTimeAlt").val('');
     })
 
     laydate.render({
-        elem : '#dueTime',
+        elem : '.dueTime',
         type : 'date',
-        trigger: 'click',
+        trigger: 'click'/*,
         done : function(value, date) {
             console.log(value);
-        }
+        }*/
     })
 
-    $.each(parent.userList, function(index, item) {
-        $('#dp').append(new Option(item.username, item.id));
+    $.each(parent.userListData, function(index, item) {
+        $('#dp').append(new Option(item.username, item.userId));
         $('#dp').removeAttr("disabled");
     });
     form.render("select");
@@ -51,6 +51,33 @@ layui.config({
 
 
     form.on("submit(addWork)",function(data){
+
+        var type = $("select[name='type']").val();
+        var origin = $.trim($("text[name='origin']").val());
+        var userId = $("select[name='userId']").val();
+        var content = $.trim($("textarea[name='content']").val());
+        var dueTime = $("text[name='dueTime']").val();
+        var dueTimeAlt = $.trim($("text[name='dueTimeAlt']").val());
+
+        if("" == type || null == type){
+            layer.alert("工作类型不能为空！");
+            return false;
+        }else if("" == origin || null == origin){
+            layer.alert("工作来源不能为空！");
+            return false;
+        }else if("" == userId || null == userId){
+            layer.alert("责任单位不能为空！");
+            return false;
+        }else if("" == content || null == content){
+            layer.alert("内容不能为空！");
+            return false;
+        }else if(("" == dueTime || null == dueTime)&&("" == dueTimeAlt || null == dueTimeAlt)){
+            layer.alert("办结时限不能为空！");
+            return false;
+    }
+
+
+
         var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.2});
         var index1 = parent.layer.getFrameIndex(window.name);
         var msg,flag=false;
@@ -100,5 +127,3 @@ layui.config({
     })*/
 
 });
-
-

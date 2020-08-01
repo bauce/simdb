@@ -1,7 +1,13 @@
 ﻿layui.use([ 'form','layer','jquery','table','laydate'], function() {
 	var layer = layui.layer, $ = layui.jquery, form = layui.form,table=layui.table,laydate = layui.laydate;
 
+	$(".userId").val(parent.fdata.userId);
+	$(".username").val(parent.fdata.username);
 	$(".phone").val(parent.fdata.phone);
+	$(".email").val(parent.fdata.email);
+	$(".role").val(parent.fdata.roleId);
+	form.render('select');
+
 
 	form.verify({
 		repass: function (value) {

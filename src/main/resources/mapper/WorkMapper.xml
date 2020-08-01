@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yy.simdb.dao.WorkMapper">
   <resultMap id="BaseResultMap" type="com.yy.simdb.entity.Work">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="work_id" jdbcType="INTEGER" property="workId" />
     <result column="no" jdbcType="CHAR" property="no" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="origin" jdbcType="CHAR" property="origin" />
@@ -11,11 +11,99 @@
     <result column="due_time" jdbcType="DATE" property="dueTime" />
     <result column="due_time_alt" jdbcType="CHAR" property="dueTimeAlt" />
     <result column="finished" jdbcType="TINYINT" property="finished" />
+    <result column="finish_time" jdbcType="DATE" property="finishTime" />
     <result column="other" jdbcType="CHAR" property="other" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yy.simdb.entity.Work">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
+
+  <resultMap extends="ResultMapWithBLOBs" id="Work" type="com.yy.simdb.entity.Work">
+    <association property="user" javaType="User">
+    </association>
+  </resultMap>
+
+  <resultMap  extends="ResultMapWithBLOBs" id="WorkWithLastInfo" type="com.yy.simdb.entity.Work">
+    <association property="info" javaType="WorkInfo">
+      <id column="work_info_id" jdbcType="INTEGER" property="workInfoId" />
+      <result column="wid" jdbcType="INTEGER" property="wid" />
+      <result column="wi_create_time" jdbcType="DATE" property="createTime" />
+      <result column="status" jdbcType="INTEGER" property="status" />
+      <result column="wi_finished" jdbcType="TINYINT" property="finished" />
+      <result column="date" jdbcType="DATE" property="date" />
+      <result column="bgs_comment" jdbcType="CHAR" property="bgsComment" />
+      <result column="modify_time" jdbcType="TIMESTAMP" property="modifyTime" />
+      <result column="info" jdbcType="LONGVARCHAR" property="info" />
+    </association>
+  </resultMap>
+
+  <select id="getWorkWithLastInfo" resultMap="WorkWithLastInfo" parameterType="com.yy.simdb.entity.WorkInfoSearch">
+    SELECT * FROM
+    (SELECT
+    w.*,
+    wi.work_info_id,
+    wi.wid,
+    wi.info,
+    wi.create_time as wi_create_time,
+    wi.status,
+    wi.finished as wi_finished,
+    wi.date,
+    wi.bgs_comment
+    from
+    work w
+	LEFT JOIN work_info wi on wi.wid =w.work_id 
+	<where>
+      <if test="null != userId and '' != userId">
+        and user_id = #{userId}
+      </if>
+      <if test="null != workId and '' !=  workId">
+        and work_id = #{workId}
+      </if>
+      <if test="null != status and '' !=  status">
+        <choose>
+          <when test='status=="0"'>
+            and ((work_info_id is null) or (status != 2 and status != 4))
+          </when>
+          <when test='status=="1"'>
+            and status = 2
+          </when>
+          <when test='status=="2"'>
+            and status = 4
+          </when>
+        </choose>
+      </if>
+      <if test="null != type and '' !=  type">
+        and type = #{type}
+      </if>
+      <if test="originKey != null and '' !=  originKey">
+       and origin like "%"#{originKey}"%"
+      </if>
+      <if test="contentKey != null and '' != contentKey">
+       and content like "%"#{contentKey}"%"
+      </if>
+      <if test="dueTime !=null and '' != dueTime">
+       and due_time_ = #{dueTime}
+      </if>
+      <if test="dueTimeAlt !=null and '' != dueTimeAlt">
+       and due_time_alt like "%"#{dueTimeAlt}"%"
+      </if>
+      <if test="finished !=null and '' != finished">
+       and w.finished = #{finished}
+      </if>
+    </where>
+	ORDER BY wi_create_time DESC limit 10000000000) a
+	GROUP BY work_id
+  </select>
+
+  <select id="getWorkById" parameterType="int" resultMap="Work">
+    select * from work w,user u
+    where w.user_id =u.user_id and w.work_id= #{id}
+  </select>
+
+  <select id="getWorkByUserId" parameterType="int" resultMap="Work">
+    select * from work w,user u
+    where w.user_id =u.user_id and u.user_id= #{id}
+  </select>
 
   <select id="getAllWorkList" resultMap="ResultMapWithBLOBs" parameterType="com.yy.simdb.entity.WorkSearch">
     select * from work
@@ -42,15 +130,25 @@
         and due_time_alt like '%#{dueTimeAlt}%'
       </if>
       <if test="finished != null and ''!= finished">
-        and finished = #{finished}
+        and w.finished = #{finished}
       </if>
     </where>
-    order by id asc
+    order by user_id asc
   </select>
 
   <select id="queryByContent" parameterType="java.lang.String" resultType="java.lang.Integer">
-    select count(*) where content = #{content}
+    select count(*) from work where content = #{content}
   </select>
+
+
+  <select id="getUnfinishWorkIds" resultType="java.lang.Integer">
+    select work_id
+    from work
+    where finished = 0
+  </select>
+
+
+
 
   <sql id="Example_Where_Clause">
     <where>
@@ -111,7 +209,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, no, type, origin, user_id, create_time, due_time, due_time_alt, finished, other
+    work_id, no, type, origin, user_id, create_time, due_time, due_time_alt, finished, 
+    finish_time, other
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -152,11 +251,11 @@
     ,
     <include refid="Blob_Column_List" />
     from work
-    where id = #{id,jdbcType=INTEGER}
+    where work_id = #{workId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from work
-    where id = #{id,jdbcType=INTEGER}
+    where work_id = #{workId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.yy.simdb.entity.WorkExample">
     delete from work
@@ -165,20 +264,22 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.yy.simdb.entity.Work">
-    insert into work (id, no, type, origin, 
-      user_id, create_time, due_time, 
-      due_time_alt, finished, other, 
-      content)
-    values (#{id,jdbcType=INTEGER}, #{no,jdbcType=CHAR}, #{type,jdbcType=INTEGER}, #{origin,jdbcType=CHAR}, 
-      #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, #{dueTime,jdbcType=DATE}, 
-      #{dueTimeAlt,jdbcType=CHAR}, #{finished,jdbcType=TINYINT}, #{other,jdbcType=CHAR}, 
-      #{content,jdbcType=LONGVARCHAR})
+    insert into work (work_id, no, type, 
+      origin, user_id, create_time, 
+      due_time, due_time_alt, finished, 
+      finish_time, other, content
+      )
+    values (#{workId,jdbcType=INTEGER}, #{no,jdbcType=CHAR}, #{type,jdbcType=INTEGER}, 
+      #{origin,jdbcType=CHAR}, #{userId,jdbcType=INTEGER}, #{createTime,jdbcType=DATE}, 
+      #{dueTime,jdbcType=DATE}, #{dueTimeAlt,jdbcType=CHAR}, #{finished,jdbcType=TINYINT}, 
+      #{finishTime,jdbcType=DATE}, #{other,jdbcType=CHAR}, #{content,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.yy.simdb.entity.Work">
     insert into work
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
+      <if test="workId != null">
+        work_id,
       </if>
       <if test="no != null">
         no,
@@ -204,6 +305,9 @@
       <if test="finished != null">
         finished,
       </if>
+      <if test="finishTime != null">
+        finish_time,
+      </if>
       <if test="other != null">
         other,
       </if>
@@ -212,8 +316,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
+      <if test="workId != null">
+        #{workId,jdbcType=INTEGER},
       </if>
       <if test="no != null">
         #{no,jdbcType=CHAR},
@@ -239,6 +343,9 @@
       <if test="finished != null">
         #{finished,jdbcType=TINYINT},
       </if>
+      <if test="finishTime != null">
+        #{finishTime,jdbcType=DATE},
+      </if>
       <if test="other != null">
         #{other,jdbcType=CHAR},
       </if>
@@ -256,8 +363,8 @@
   <update id="updateByExampleSelective" parameterType="map">
     update work
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="record.workId != null">
+        work_id = #{record.workId,jdbcType=INTEGER},
       </if>
       <if test="record.no != null">
         no = #{record.no,jdbcType=CHAR},
@@ -283,6 +390,9 @@
       <if test="record.finished != null">
         finished = #{record.finished,jdbcType=TINYINT},
       </if>
+      <if test="record.finishTime != null">
+        finish_time = #{record.finishTime,jdbcType=DATE},
+      </if>
       <if test="record.other != null">
         other = #{record.other,jdbcType=CHAR},
       </if>
@@ -296,7 +406,7 @@
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update work
-    set id = #{record.id,jdbcType=INTEGER},
+    set work_id = #{record.workId,jdbcType=INTEGER},
       no = #{record.no,jdbcType=CHAR},
       type = #{record.type,jdbcType=INTEGER},
       origin = #{record.origin,jdbcType=CHAR},
@@ -305,6 +415,7 @@
       due_time = #{record.dueTime,jdbcType=DATE},
       due_time_alt = #{record.dueTimeAlt,jdbcType=CHAR},
       finished = #{record.finished,jdbcType=TINYINT},
+      finish_time = #{record.finishTime,jdbcType=DATE},
       other = #{record.other,jdbcType=CHAR},
       content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
@@ -313,7 +424,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update work
-    set id = #{record.id,jdbcType=INTEGER},
+    set work_id = #{record.workId,jdbcType=INTEGER},
       no = #{record.no,jdbcType=CHAR},
       type = #{record.type,jdbcType=INTEGER},
       origin = #{record.origin,jdbcType=CHAR},
@@ -322,6 +433,7 @@
       due_time = #{record.dueTime,jdbcType=DATE},
       due_time_alt = #{record.dueTimeAlt,jdbcType=CHAR},
       finished = #{record.finished,jdbcType=TINYINT},
+      finish_time = #{record.finishTime,jdbcType=DATE},
       other = #{record.other,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -345,11 +457,11 @@
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=DATE},
       </if>
-      <if test="dueTime != null">
-        due_time = #{dueTime,jdbcType=DATE},
+      <if test="dueTime != null and '' != dueTime">
+        due_time = #{dueTime,jdbcType=DATE},due_time_alt = NULL,
       </if>
-      <if test="dueTimeAlt != null">
-        due_time_alt = #{dueTimeAlt,jdbcType=CHAR},
+      <if test="dueTimeAlt != null and '' != dueTimeAlt">
+        due_time_alt = #{dueTimeAlt,jdbcType=CHAR},due_time = NULL,
       </if>
       <if test="finished != null">
         finished = #{finished,jdbcType=TINYINT},
@@ -361,7 +473,7 @@
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where work_id = #{workId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yy.simdb.entity.Work">
     update work
@@ -373,9 +485,10 @@
       due_time = #{dueTime,jdbcType=DATE},
       due_time_alt = #{dueTimeAlt,jdbcType=CHAR},
       finished = #{finished,jdbcType=TINYINT},
+      finish_time = #{finishTime,jdbcType=DATE},
       other = #{other,jdbcType=CHAR},
       content = #{content,jdbcType=LONGVARCHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where work_id = #{workId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yy.simdb.entity.Work">
     update work
@@ -387,7 +500,8 @@
       due_time = #{dueTime,jdbcType=DATE},
       due_time_alt = #{dueTimeAlt,jdbcType=CHAR},
       finished = #{finished,jdbcType=TINYINT},
+      finish_time = #{finishTime,jdbcType=DATE},
       other = #{other,jdbcType=CHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where work_id = #{workId,jdbcType=INTEGER}
   </update>
 </mapper>

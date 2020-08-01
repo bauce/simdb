@@ -33,7 +33,7 @@ public class UserController {
         if (null != user){
             System.err.println(user.toString());
             session.setAttribute("user", user);
-            return ResultUtil.ok(user.getId());
+            return ResultUtil.ok(user.getUserId());
         }
         else {
             return ResultUtil.error();
@@ -53,7 +53,7 @@ public class UserController {
     @ResponseBody
     public List<Menu> getMenus(HttpSession session){
         User user = (User)session.getAttribute("user");
-        User user2 = (User)userMapper.selectByPrimaryKey(user.getId());
+        User user2 = (User)userMapper.selectByPrimaryKey(user.getUserId());
         List<Menu> menus = null;
         if(null != user2){
             menus = userService.getMenus(user2);
@@ -117,7 +117,7 @@ public class UserController {
         return ResultUtil.ok();
     }
 
-    @RequestMapping("deleteUserByid")
+    @RequestMapping("deleteUserById")
     @ResponseBody
     public ResultUtil deleteUserById(int id){
         userMapper.deleteByPrimaryKey(id);

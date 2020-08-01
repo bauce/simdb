@@ -1,33 +1,29 @@
 var fdata,userListData;
 layui.use([ 'form','layer','jquery','table','laydate'], function() {
     var layer = layui.layer, $ = layui.jquery, form = layui.form,table=layui.table,laydate = layui.laydate;
-    var nowTime = new Date().valueOf();
-    var max = null;
+
 
     $("body").on('click','.layui-table-body tr ',function () {
         var data_index=$(this).attr('data-index');//得到当前的tr的index
-        window.sessionStorage.setItem('curIndex',data_index);
         $(".layui-table-body tr").attr({"style":"background:#FFFFFF"});//其他tr恢复颜色
         $(".layui-table-body tr[data-index="+data_index+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
-
     });
 
     active = {
         search : function(){
-
             var type = $('#type option:selected');
             var finished = $('#finished option:selected');
-            var userId = $('#dp option:selected');
+            var userId = sessionStorage.getItem("userId");
 
 
             table.reload('workList',{
                 page : {
-                    curr : $(".layui-laypage-em").next().html()
+                    curr : 1
                 },
                 where : {
                     type : type.val(),
                     finished : finished.val(),
-                    userId : userId.val()
+                    userId : sessionStorage.getItem("userId")
                     /*username : username.val(),*/
 
                 }
@@ -35,9 +31,8 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         }
     };
 
-
     //获取用户名和id，装入下拉菜单，并存入全局变量
-    $.ajax({
+    /*$.ajax({
         type: "post",
         url: ctx+"/user/getUserList",
         async:false,
@@ -54,25 +49,25 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                 layer.msg(d.message);
             }
         }}
-    );
+    );*/
 
 
     table.render({
         id:'workList'
         ,elem: '#workList'
-        ,url: ctx+'/work/getAllWorkList'// 数据接口
+        ,url: ctx+'/work/getWorkWithLastInfo?userId='+sessionStorage.getItem("userId")// 数据接口
         ,toolbar : true
         ,limit:10// 每页默认数
         ,limits:[10,20,30,40]
         ,cols: [[ // 表头
             {field:'no',title:'编号',align:'center',width:60},
             {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:150},
-            {field:'content',title:'督办内容',align:'center',width:300},
+            {field:'content',title:'督办内容',align:'center',width:400},
             {field:'origin',title:'督办依据',align:'center',width:150},
             {field:'dueTime',title:'截止时间',align:'center',templet : '#timeTpl',width:102},
-            {field:'userId',title:'责任科室',align:'center',templet : '#userTpl',width:120},
             {field:'finished',title:'是否办结',align:'center',templet : '#doneTpl',width:87},
-            {field: 'right', title: '操作', align: 'center', toolbar: "#barDemo",width:150}
+            {field:'status',title:'审核状态',align:'center',templet : '#statusTpl',width:87},
+            {field: 'progress', title: '填报进度', align: 'center', toolbar: "#barDemo",width:150}
         ]]
         ,page: true // 开启分页
         ,loading:true
@@ -83,42 +78,15 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
     table.on('tool(workList)', function (obj) {
         var data = obj.data;
         fdata = data;
-        console.log(fdata);
-        if (obj.event === 'delete') {
-            layer.confirm('确定要删除么？', function (index) {
-                $.ajax({
-                    url : ctx + '/work/deleteWorkById',
-                    type : "POST",
-                    data: {"id": data.workId},
-                    success : function(d) {
-                        if (d.code == 0) {
-                            layer.msg("删除成功！",{icon: 1});
-                            obj.del();
-                        } else {
-                            layer.msg("权限不足，删除失败！", {
-                                icon : 5
-                            });
-                        }
-                    },
-                    error:function(){
-                        layer.msg("删除失败！网络错误！",{icon: 5});
-                    }
-                })
-                layer.close(index);
-            });
-        } else if (obj.event === 'edit') {
+        console.log(obj);
+        if (obj.event === 'edit') {
             var editIndex = layer.open({
                 type : 2,
-                title : "编辑工作",
-                area : [ '800px', '460px' ],
-                content : ctx + "/work/editWork",
+                title : "填写进度",
+                area : [ '450px', '500px' ],
+                content : ctx + "/info/addInfo",
                 success : function(layero, index) {
                     var body=layer.getChildFrame('body',index);
-                },
-                end : function () {
-                    console.log('ok');
-                    data_index = sessionStorage.getItem('curIndex');
-                    $(".layui-table-body tr[data-index="+data_index+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
                 }
             });
         }
@@ -129,17 +97,6 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         active[type] ? active[type].call(this) : '';
     });
 
-    $(".addWork_btn").click(function() {
-        var addIndex = layer.open({
-            type : 2,
-            title : "添加工作",
-            area : [ '800px', '460px' ],
-            content : ctx + "/work/addWork",
-            success : function(layero, index) {
-
-            }
-        })
-    })
 });
 
 

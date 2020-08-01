@@ -2,12 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yy.simdb.dao.UserMapper">
   <resultMap id="BaseResultMap" type="com.yy.simdb.entity.User">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
     <result column="username" jdbcType="CHAR" property="username" />
     <result column="password" jdbcType="CHAR" property="password" />
     <result column="role_id" jdbcType="INTEGER" property="roleId" />
     <result column="phone" jdbcType="CHAR" property="phone" />
     <result column="email" jdbcType="CHAR" property="email" />
+  </resultMap>
+  <resultMap id="User" extends="BaseResultMap" type="com.yy.simdb.entity.User">
+    <collection property="works" ofType="Work" resultMap="com.yy.simdb.dao.WorkMapper.ResultMapWithBLOBs">
+    </collection>
   </resultMap>
 
   <select id="login" resultMap="BaseResultMap">
@@ -36,7 +40,7 @@
 
 
   <update id="updateUser" parameterType="User">
-    update user 
+    update user
     <set>
       <if test="null != username and '' != username">
         username = #{username},
@@ -54,27 +58,36 @@
         email = #{email},
       </if>
     </set>
-    where id = #{id}
+    where user_id = #{userId}
   </update>
 
   <delete id="deleteById">
     delete from user
-    where id = #{id}
+    where user_id = #{userId}
   </delete>
 
   <select id="getUserByUsername" resultType="java.lang.Integer">
     select count(*) from user
     where username =#{username}
   </select>
-
-  <select id="getUserList" resultType="com.yy.simdb.entity.UserMini">
-    select id,username from user
+  <resultMap id="userMini" type="UserMini">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="username" jdbcType="CHAR" property="username" />
+  </resultMap>
+  <select id="getUserList" resultMap="userMini">
+    select user_id,username from user
   </select>
   <!--<insert id="insUser" parameterType="User">
     insert into user (username,password,role_id,phone,email)
     values (#{username},#{password},#{roleId},#{phone},#{email})
   </insert>-->
-
+  <select id="getUserByUserId" parameterType="int" resultMap="User">
+    select
+    w.*,
+    u.*
+    from work w,user u
+    where w.user_id =u.user_id and u.user_id= #{id}
+  </select>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -134,7 +147,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, username, password, role_id, phone, email
+    user_id, username, password, role_id, phone, email
   </sql>
   <select id="selectByExample" parameterType="com.yy.simdb.entity.UserExample" resultMap="BaseResultMap">
     select
@@ -154,11 +167,11 @@
     select 
     <include refid="Base_Column_List" />
     from user
-    where id = #{id,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from user
-    where id = #{id,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.yy.simdb.entity.UserExample">
     delete from user
@@ -167,16 +180,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.yy.simdb.entity.User">
-    insert into user (id, username, password, 
+    insert into user (user_id, username, password, 
       role_id, phone, email)
-    values (#{id,jdbcType=INTEGER}, #{username,jdbcType=CHAR}, #{password,jdbcType=CHAR}, 
+    values (#{userId,jdbcType=INTEGER}, #{username,jdbcType=CHAR}, #{password,jdbcType=CHAR}, 
       #{roleId,jdbcType=INTEGER}, #{phone,jdbcType=CHAR}, #{email,jdbcType=CHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.yy.simdb.entity.User">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
+      <if test="userId != null">
+        user_id,
       </if>
       <if test="username != null">
         username,
@@ -195,8 +208,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
       </if>
       <if test="username != null">
         #{username,jdbcType=CHAR},
@@ -224,8 +237,8 @@
   <update id="updateByExampleSelective" parameterType="map">
     update user
     <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=INTEGER},
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
       </if>
       <if test="record.username != null">
         username = #{record.username,jdbcType=CHAR},
@@ -249,7 +262,7 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update user
-    set id = #{record.id,jdbcType=INTEGER},
+    set user_id = #{record.userId,jdbcType=INTEGER},
       username = #{record.username,jdbcType=CHAR},
       password = #{record.password,jdbcType=CHAR},
       role_id = #{record.roleId,jdbcType=INTEGER},
@@ -278,7 +291,7 @@
         email = #{email,jdbcType=CHAR},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yy.simdb.entity.User">
     update user
@@ -287,6 +300,6 @@
       role_id = #{roleId,jdbcType=INTEGER},
       phone = #{phone,jdbcType=CHAR},
       email = #{email,jdbcType=CHAR}
-    where id = #{id,jdbcType=INTEGER}
+    where user_id = #{userId,jdbcType=INTEGER}
   </update>
 </mapper>

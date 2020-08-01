@@ -2,6 +2,7 @@ package com.yy.simdb.controller;
 
 
 import com.yy.simdb.entity.Work;
+import com.yy.simdb.entity.WorkInfoSearch;
 import com.yy.simdb.entity.WorkSearch;
 import com.yy.simdb.service.WorkService;
 import com.yy.simdb.util.ResultUtil;
@@ -18,11 +19,6 @@ public class WorkController {
     @Autowired
     private WorkService workService;
 
-    @RequestMapping("getAllWorkList")
-    @ResponseBody
-    public ResultUtil getAllWorkList(Integer page, Integer limit, WorkSearch search){
-        return workService.getAllWorklist(page,limit,search);
-    }
 
     @RequestMapping("listWork")
     public String userList(){
@@ -39,15 +35,30 @@ public class WorkController {
         return "jsp/work/editWork";
     }
 
-    @RequestMapping("inserWork")
+    @RequestMapping("listMyWork")
+    public String listMyWork(){ return "/jsp/work/listMyWork"; }
+
+    @RequestMapping("getAllWorkList")
     @ResponseBody
-    public ResultUtil inserWork(Work work){
+    public ResultUtil getMyWorkList(Integer page, Integer limit, WorkSearch search){
+        return workService.getAllWorkList(page,limit,search);
+    }
+
+    @RequestMapping("getWorkWithLastInfo")
+    @ResponseBody
+    public ResultUtil getWorkWithLastInfo(Integer page, Integer limit, WorkInfoSearch search){
+        return workService.getWorkWithLastInfo(page,limit,search);
+    }
+
+    @RequestMapping("insertWork")
+    @ResponseBody
+    public ResultUtil insertWork(Work work){
         int cc = workService.queryByContent(work.getContent());
         if(cc != 0){
             return new ResultUtil(500,"工作已存在");
         }
         try{
-            return workService.inserWork(work);
+            return workService.insertWork(work);
         }catch (Exception e){
             return new ResultUtil(502,"添加失败");
         }
@@ -55,8 +66,14 @@ public class WorkController {
 
     @RequestMapping("deleteWorkById")
     @ResponseBody
-    public ResultUtil deleteWork(int id){
-        return workService.deleteWorkByid(id);
+    public ResultUtil deleteWorkById(int id){
+        return workService.deleteWorkById(id);
+    }
+
+    @RequestMapping("updateWork")
+    @ResponseBody
+    public ResultUtil updateWork(Work work){
+        return workService.updateWork(work);
     }
 
 }

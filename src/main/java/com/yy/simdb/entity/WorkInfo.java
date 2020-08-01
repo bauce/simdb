@@ -3,7 +3,8 @@ package com.yy.simdb.entity;
 import java.util.Date;
 
 public class WorkInfo {
-    private Integer id;
+
+    private Integer workInfoId;
 
     private Integer wid;
 
@@ -21,12 +22,14 @@ public class WorkInfo {
 
     private String info;
 
-    public Integer getId() {
-        return id;
+    private Work work;
+
+    public Integer getWorkInfoId() {
+        return workInfoId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setWorkInfoId(Integer workInfoId) {
+        this.workInfoId = workInfoId;
     }
 
     public Integer getWid() {
@@ -93,13 +96,21 @@ public class WorkInfo {
         this.info = info == null ? null : info.trim();
     }
 
+    public Work getWork() {
+        return work;
+    }
+
+    public void setWork(Work work) {
+        this.work = work;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
+        sb.append(", workInfoId=").append(workInfoId);
         sb.append(", wid=").append(wid);
         sb.append(", createTime=").append(createTime);
         sb.append(", status=").append(status);

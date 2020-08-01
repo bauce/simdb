@@ -1,16 +1,18 @@
 package com.yy.simdb.entity;
 
-public class WorkSearch {
+public class WorkInfoSearch {
+
+    private String userId;
+
+    private String workId;
+
+    private String status;
 
     private String type;
-
-    private String no;
 
     private String originKey;
 
     private String contentKey;
-
-    private String userId;
 
     private String dueTime;
 
@@ -18,28 +20,36 @@ public class WorkSearch {
 
     private String finished;
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getNo() {
-        return no;
-    }
-
-    public void setNo(String no) {
-        this.no = no;
-    }
-
     public String getUserId() {
         return userId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getWorkId() {
+        return workId;
+    }
+
+    public void setWorkId(String workId) {
+        this.workId = workId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getOriginKey() {
@@ -81,4 +91,5 @@ public class WorkSearch {
     public void setFinished(String finished) {
         this.finished = finished;
     }
+
 }

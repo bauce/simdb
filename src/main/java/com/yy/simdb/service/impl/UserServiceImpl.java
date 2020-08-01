@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -65,19 +67,21 @@ public class UserServiceImpl implements UserService {
                             menus.add(menu2);
                         }
                     }
+                    menus = menus.stream().sorted(Comparator.comparing(Menu::getSort).reversed()).collect(Collectors.toList());
                     menu.setChildren(menus);
                     menuList.add(menu);
 
                 }
             }
         }
+        menuList = menuList.stream().sorted(Comparator.comparing(Menu::getSort).reversed()).collect(Collectors.toList());
         return menuList;
     }
 
     @Override
     public ResultUtil getAllUerList(Integer page, Integer limit, UserSearch search) {
         PageHelper.startPage(page,limit);
-        List<User> users =userMapper.getAllUserList(search);
+        List<User> users = userMapper.getAllUserList(search);
         PageInfo<User> pageInfo = new PageInfo<>(users);
         ResultUtil resultUtil = new ResultUtil();
         resultUtil.setCode(0);
@@ -102,13 +106,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int deleteUserByid(int id) {
+    public int deleteUserById(int id) {
         return userMapper.deleteByPrimaryKey(id);
     }
 
     @Override
     public int updateUser(User user) {
-        System.err.println(user.getPassword());
         return userMapper.updateByPrimaryKeySelective(user);
     }
 

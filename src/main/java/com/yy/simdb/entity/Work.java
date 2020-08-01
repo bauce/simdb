@@ -1,9 +1,11 @@
 package com.yy.simdb.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 public class Work {
-    private Integer id;
+    private Integer workId;
 
     private String no;
 
@@ -15,22 +17,29 @@ public class Work {
 
     private Date createTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dueTime;
 
     private String dueTimeAlt;
 
     private Byte finished;
 
+    private Date finishTime;
+
     private String other;
 
     private String content;
 
-    public Integer getId() {
-        return id;
+    private User user;
+
+    private WorkInfo info;
+
+    public Integer getWorkId() {
+        return workId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setWorkId(Integer workId) {
+        this.workId = workId;
     }
 
     public String getNo() {
@@ -97,6 +106,14 @@ public class Work {
         this.finished = finished;
     }
 
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
+    }
+
     public String getOther() {
         return other;
     }
@@ -113,13 +130,29 @@ public class Work {
         this.content = content == null ? null : content.trim();
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public WorkInfo getInfo() {
+        return info;
+    }
+
+    public void setInfo(WorkInfo info) {
+        this.info = info;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
+        sb.append(", workId=").append(workId);
         sb.append(", no=").append(no);
         sb.append(", type=").append(type);
         sb.append(", origin=").append(origin);
@@ -128,9 +161,16 @@ public class Work {
         sb.append(", dueTime=").append(dueTime);
         sb.append(", dueTimeAlt=").append(dueTimeAlt);
         sb.append(", finished=").append(finished);
+        sb.append(", finishTime=").append(finishTime);
         sb.append(", other=").append(other);
         sb.append(", content=").append(content);
         sb.append("]");
+        if(null != getInfo()){
+            sb.append(" [");
+            sb.append("info ="+info.toString());
+            sb.append("]");
+        }
         return sb.toString();
     }
+
 }
