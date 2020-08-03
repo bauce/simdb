@@ -12,7 +12,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>都纪督查</title>
+    <title>督查督办</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -29,7 +29,7 @@
 </head>
     <body>
         <form class="box layui-form" lay-filter="login">
-            <h1>都江堰市纪委监委<br>督查督办系统</h1>
+            <h1>督查督办系统</h1>
             <input type="text" id="username" placeholder="用户名">
             <input type="password" id="password" placeholder="密码">
             <button id="loginBt" class="login-btn layui-btn">登录</button>
