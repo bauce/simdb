@@ -3,6 +3,7 @@ package com.yy.simdb.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yy.simdb.dao.WorkInfoMapper;
+import com.yy.simdb.dao.WorkMapper;
 import com.yy.simdb.entity.Work;
 import com.yy.simdb.entity.WorkInfo;
 import com.yy.simdb.entity.WorkInfoSearch;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -21,6 +24,9 @@ public class InfoServiceImpl implements InfoService {
 
     @Autowired
     WorkInfoMapper infoMapper;
+
+    @Autowired
+    WorkMapper workMapper;
 
     @Override
     public ResultUtil insertInfo(WorkInfo info) {
@@ -95,5 +101,27 @@ public class InfoServiceImpl implements InfoService {
         resultUtil.setCount(pageInfo.getTotal());
         resultUtil.setData(pageInfo.getList());
         return resultUtil;
+    }
+
+    @Override
+    public ResultUtil archInfo() {
+        ResultUtil resultUtil;
+        WorkInfoSearch infoSearch = new WorkInfoSearch();
+        infoSearch.setFinished(Integer.toString(0));
+        List<Work> allInfo = workMapper.getWorkWithLastInfo(infoSearch);
+        infoSearch.setStatus(Integer.toString(3));
+        List<Work> allReviewedInfo = workMapper.getWorkWithLastInfo(infoSearch);
+        if (allInfo.size()!=allReviewedInfo.size()){
+            resultUtil = new ResultUtil();
+            resultUtil.setCode(500);
+            Map<String,Integer> map = new HashMap<>();
+            map.put("all",allInfo.size());
+            map.put("rev",allReviewedInfo.size());
+            resultUtil.setData(map);
+            return resultUtil;
+        }else {
+            
+        }
+        return null;
     }
 }

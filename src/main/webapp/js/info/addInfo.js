@@ -42,7 +42,7 @@ layui.config({
     form.on("submit(saveInfo)",function (obj) {
         console.log(obj);
         if("" == $('.finished').val() || null == $('.finished').val()){
-            layer.alert("完成状态不能为空！");
+            layer.alert("是否办结不能为空！");
             return false;
         }else if("" == $.trim($('.info').val()) || null == $.trim($('.info').val())){
             layer.alert("推进情况不能为空！");
@@ -69,7 +69,7 @@ layui.config({
                 if(result.code == 0) {
                     msg = "保存成功，请及时提交审核!";
                     flag = true;
-                    $(obj.tr).children('td').eq(9).html('暂存');
+                    $(obj.tr).children('td').eq(7).html('暂存');
                 }else {
                     msg = "保存失败！";
                 }
@@ -78,7 +78,10 @@ layui.config({
                 layer.msg("提交失败")
                 layer.closeAll();
                 return false;
-            }
+            }/*,
+            end:function () {
+                parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
+            }*/
         });
         setTimeout(function () {
             parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
@@ -124,8 +127,8 @@ layui.config({
                 if(result.code == 0) {
                     msg = "提交成功，请等待审核!";
                     flag = true;
-                    $(obj.tr).children('td').eq(9).html('待审核');
-                    $(obj.tr).children('td').eq(10).html('请等待');
+                    $(obj.tr).children('td').eq(7).html('待审核');
+                    $(obj.tr).children('td').eq(8).html('请等待');
                 }else {
                     msg = "提交失败！";
                 }
@@ -134,9 +137,13 @@ layui.config({
                 layer.msg("提交失败")
                 layer.closeAll();
                 return false;
-            }
+            }/*,
+            end:function () {
+                parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
+            }*/
         });
         setTimeout(function () {
+            parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
             parent.layer.close(index1);
             top.layer.close(index);
             if(flag){
@@ -144,8 +151,7 @@ layui.config({
             }else{
                 top.layer.msg(msg,{icon: 5});
             }
-            parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
-        }, 2000);
+        }, 1000);
         return false;
     });
 

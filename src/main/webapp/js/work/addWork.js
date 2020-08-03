@@ -104,7 +104,7 @@ layui.config({
 
         });
         setTimeout(function () {
-            parent.layer.close(index1);
+            parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
             top.layer.close(index);
             if(flag){
                 top.layer.msg(msg,{icon: 1});

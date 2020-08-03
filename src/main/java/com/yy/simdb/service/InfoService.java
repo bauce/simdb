@@ -27,4 +27,6 @@ public interface InfoService {
 
     ResultUtil getLastInfoWithWork(Integer page, Integer limit, WorkInfoSearch infoSearch);
 
+    ResultUtil archInfo();
+
 }

@@ -1,7 +1,7 @@
 var fdata,userListData;
 layui.use([ 'form','layer','jquery','table','laydate'], function() {
     var layer = layui.layer, $ = layui.jquery, form = layui.form,table=layui.table,laydate = layui.laydate;
-
+    var exportData;
 
     $("body").on('click','.layui-table-body tr ',function () {
         var data_index=$(this).attr('data-index');//得到当前的tr的index
@@ -56,31 +56,38 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
     );
 
 
-    table.render({
+    var ins = table.render({
         id:'workList'
         ,elem: '#workList'
         ,url: ctx+'/work/getWorkWithLastInfo'// 数据接口
-        ,toolbar : true
+        ,toolbar : '#toolbar'
+        ,defaultToolbar: ['filter']
         ,limit:10// 每页默认数
         ,limits:[10,20,30,40]
         ,cols: [[ // 表头
             {field:'no',title:'编号',align:'center',templet : '<div>{{ d.no}}</div>',hide:true,width:60},
             /*{field:'workInfoId',title:'编号',align:'center',templet : '<div>{{ d.info.workInfoId}}</div>',hide:true,width:60},*/
             {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:150},
-            {field:'content',title:'督办内容',align:'center',width:250},
+            {field:'content',title:'督办内容',align:'center',width:200},
             {field:'origin',title:'督办依据',align:'center',width:150},
             {field:'userId',title:'责任科室',align:'center',templet : '#userTpl',width:120},
             {field:'dueTime',title:'截止时间',align:'center',templet : '#timeTpl',width:102},
             {field:'finished',title:'是否办结',align:'center',templet : '#doneTpl',width:87},
             {field:'info',title:'最新进度',align:'center',templet : '#infoTpl',width:87},
             {field:'status',title:'审核状态',align:'center',templet : '#statusTpl',width:87},
-            {field: 'progress', title: '审核进度', align: 'center', toolbar: "#barDemo",width:150}
-        ]]
+            {field: 'progress', title: '审核进度', align: 'center', toolbar: "#barDemo",width:87}
+        ]],
+        done: function (res, curr, count) {
+            exportData=res.data;
+        }
         ,page: true // 开启分页
         ,loading:true
         ,where: {timestamp: (new Date()).valueOf()}
     });
 
+    $('#export').click(function () {
+        table.exportFile(ins.config.id,exportData,"xls");
+    });
 
     table.on('tool(workList)', function (obj) {
         var data = obj.data;
@@ -102,9 +109,10 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                                 layer.msg("审核成功！",{icon: 1});
                                 $(obj.tr).children('td').eq(9).html('已通过通过');
                                 $(obj.tr).children('td').eq(10).html('请等待');
-                                obj.update({
+                                /*obj.update({
                                     status:4
-                                });
+                                });*/
+                                table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
                             } else {
                                 layer.msg("审核失败！", {
                                     icon : 5
@@ -125,15 +133,15 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                                 layer.msg("审核成功！",{icon: 1});
                                 $(obj.tr).children('td').eq(9).html('未通过');
                                 $(obj.tr).children('td').eq(10).html('请等待');
-                                obj.update({
+                                /*obj.update({
                                     status:3
-                                });
+                                });*/
+                                table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
                             } else {
                                 layer.msg("审核失败！", {
                                     icon : 5
                                 });
                             }
-                            parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
                         }
                     })
                 }, btn3: function (index) {
@@ -156,6 +164,8 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         var type = $(this).data('type');
         active[type] ? active[type].call(this) : '';
     });
+
+
 
 });
 

@@ -203,6 +203,68 @@
     </if>
   </select>
 
+  <select id="getInfoCount" resultType="java.lang.Integer" parameterType="com.yy.simdb.entity.WorkInfoSearch">
+    select count(*) from (
+    SELECT * FROM
+    (SELECT
+    w.*,
+    wi.work_info_id,
+    wi.wid,
+    wi.info,
+    wi.create_time as wi_create_time,
+    wi.status,
+    wi.finished as wi_finished,
+    wi.date,
+    wi.bgs_comment
+    from
+    work w
+    LEFT JOIN work_info wi on wi.wid =w.work_id
+    ORDER BY wi_create_time DESC limit 10000000000) a
+    GROUP BY work_id
+    <trim prefix="having" suffixOverrides="and">
+      <if test="null != userId and '' != userId">
+        user_id = #{userId} and
+      </if>
+      <if test="null != workId and '' !=  workId">
+        work_id = #{workId} and
+      </if>
+      <if test="null != status and '' !=  status">
+        <choose>
+          <when test='status=="0"'>
+            ((work_info_id is null) or (status != 2 and status != 4)) and
+          </when>
+          <when test='status=="1"'>
+            status = 2  and
+          </when>
+          <when test='status=="2"'>
+            status = 4 and
+          </when>
+        </choose>
+      </if>
+      <if test="null != type and '' !=  type">
+        type = #{type} and
+      </if>
+      <if test="originKey != null and '' !=  originKey">
+        origin like "%"#{originKey}"%" and
+      </if>
+      <if test="contentKey != null and '' != contentKey">
+        content like "%"#{contentKey}"%" and
+      </if>
+      <if test="dueTime !=null and '' != dueTime">
+        due_time_ = #{dueTime} and
+      </if>
+      <if test="dueTimeAlt !=null and '' != dueTimeAlt">
+        due_time_alt like "%"#{dueTimeAlt}"%" and
+      </if>
+      <if test="finished !=null and '' != finished">
+        finished = #{finished} and
+      </if>
+    </trim>
+    )b
+  </select>
+
+
+
 
   <sql id="Example_Where_Clause">
     <where>

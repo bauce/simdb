@@ -99,7 +99,12 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                 layer.msg("用户信息更新失败！",{icon:2});
                 layer.closeAll();
                 return false;
-            }
+            }/*,
+            end:function () {
+                parent.layer.close(index1);
+                top.layer.close(index);
+                parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
+            }*/
         });
         setTimeout(function () {
             parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
@@ -111,7 +116,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                 top.layer.msg(msg,{icon: 5});
             }
             /*parent.location.reload();*/
-        }, 2000);
+        }, 1000);
         return false;
     })
 

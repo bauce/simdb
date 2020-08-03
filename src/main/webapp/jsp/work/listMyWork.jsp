@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="${ctx }/css/list.css" media="all" />
     <link rel="stylesheet" href="${ctx }/css/font_eolqem241z66flxr.css"
           media="all" />
+    <link rel="stylesheet" href="${ctx }/css/common.css">
     <script>
         var ctx = "${ctx}";
     </script>
@@ -37,6 +38,14 @@
                     <option value="" disabled selected hidden>状态</option>
                     <option value="0">未完成</option>
                     <option value="1">已完成</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="status" class="status">
+                    <option value="" disabled selected hidden>审核状态</option>
+                    <option value="0">待填报</option>
+                    <option value="1">待审核</option>
+                    <option value="2">已审核</option>
                 </select>
             </div>
             <a style="margin-left: 10px" class="layui-btn search_btn" lay-submit="" data-type="search"
@@ -85,7 +94,7 @@
     <a class="layui-btn layui-btn-sm" lay-event="edit">
         <i class="layui-icon">&#xe642;</i>
     </a>
-    {{#  } else {}} 请等待
+    {{#  } else {}}
     {{#  } }}
 </script>
 <script type="text/javascript" src="${ctx }/layui/layui.js"></script>

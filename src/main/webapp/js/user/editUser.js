@@ -5,11 +5,7 @@
 	$(".username").val(parent.fdata.username);
 	$(".phone").val(parent.fdata.phone);
 	$(".email").val(parent.fdata.email);
-	$(".role").val(parent.fdata.roleId);
-	form.render('select');
-
-
-	form.verify({
+	$(".role").val(parent.fdata.roleId);	form.verify({
 		repass: function (value) {
 			var repassvalue = $('#password').val();
 			if(null != repassvalue && ''!=repassvalue){
@@ -20,6 +16,10 @@
 
 		}
 	});
+	form.render('select');
+
+
+
 
 	form.on("submit(updateUser)",function(data){
 		var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.2});
@@ -55,7 +55,7 @@
  				top.layer.msg(msg,{icon: 5});
  			}
  			parent.location.reload();
-	     }, 2000);
+	     }, 1000);
  		return false;
  	})
 });

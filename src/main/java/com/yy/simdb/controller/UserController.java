@@ -25,20 +25,6 @@ public class UserController {
     @Autowired
     private UserMapper userMapper;
 
-    @RequestMapping("/login")
-    @ResponseBody
-    public ResultUtil login(String username , String password , HttpServletRequest request,HttpSession session){
-        System.out.println(username+":"+password);
-        User user = userService.login(username,password);
-        if (null != user){
-            System.err.println(user.toString());
-            session.setAttribute("user", user);
-            return ResultUtil.ok(user.getUserId());
-        }
-        else {
-            return ResultUtil.error();
-        }
-    }
     @RequestMapping("index")
     public  String index(HttpSession session) {
         return "redirect:/jsp/index.jsp";
@@ -48,6 +34,19 @@ public class UserController {
     public String getMain() {
         return "jsp/main";
     }
+
+
+    @RequestMapping("addUser")
+    public String addUser() {
+        return "jsp/user/addUser";
+    }
+
+    @RequestMapping("modifyUser")
+    public String modifyUser(){ return "jsp/user/modifyUser"; }
+
+    @RequestMapping("changePassword")
+    public String changePassword(){ return "jsp/user/changePassword"; }
+
 
     @RequestMapping("getMenus")
     @ResponseBody
@@ -61,9 +60,20 @@ public class UserController {
         return  menus;
     }
 
-    @RequestMapping("addUser")
-    public String addUser() {
-        return "jsp/user/addUser";
+
+    @RequestMapping("/login")
+    @ResponseBody
+    public ResultUtil login(String username , String password , HttpServletRequest request,HttpSession session){
+        System.out.println(username+":"+password);
+        User user = userService.login(username,password);
+        if (null != user){
+            System.err.println(user.toString());
+            session.setAttribute("user", user);
+            return ResultUtil.ok(user.getUserId());
+        }
+        else {
+            return ResultUtil.error();
+        }
     }
 
     @RequestMapping("listUser")
@@ -130,8 +140,5 @@ public class UserController {
         List<UserMini> data = userMapper.getUserList();
         return ResultUtil.ok(data);
     }
-
-
-
 
 }

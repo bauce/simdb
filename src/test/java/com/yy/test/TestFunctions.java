@@ -144,4 +144,25 @@ public class TestFunctions {
         List<WorkInfo> list = workInfoMapper.getLastInfoByWorkId(1);
         System.out.println(list);
     }
+
+
+    @Test
+    public void testCountInfo(){
+        WorkInfoSearch infoSearch = new WorkInfoSearch();
+        infoSearch.setFinished(Integer.toString(0));
+        int all =  workInfoMapper.getInfoCount(null);
+        int unfinished = workInfoMapper.getInfoCount(infoSearch);
+        System.out.println("all: "+all+" ,unfinished: "+unfinished);
+    }
+
+    @Test
+    public void testCountInfo2(){
+        WorkInfoSearch infoSearch = new WorkInfoSearch();
+        infoSearch.setUserId(Integer.toString(1));
+        infoSearch.setStatus(Integer.toString(2));
+        List<Work> works = workMapper.getWorkWithLastInfo(infoSearch);
+        for (Work work : works){
+            System.out.println(work);
+        }
+    }
 }

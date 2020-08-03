@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="${ctx }/css/list.css" media="all" />
     <link rel="stylesheet" href="${ctx }/css/font_eolqem241z66flxr.css"
           media="all" />
+    <link rel="stylesheet" href="${ctx }/css/common.css">
     <script>
         var ctx = "${ctx}";
     </script>

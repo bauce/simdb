@@ -23,6 +23,10 @@ public interface WorkInfoMapper {
 
     List<WorkInfo> getLastInfoWithWork(WorkInfoSearch infoSearch);
 
+    int getInfoCount(WorkInfoSearch infoSearch);
+
+
+
 
     long countByExample(WorkInfoExample example);
 

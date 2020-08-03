@@ -15,6 +15,7 @@
         <link rel="stylesheet" href="${ctx }/css/list.css" media="all" />
         <link rel="stylesheet" href="${ctx }/css/font_eolqem241z66flxr.css"
               media="all" />
+        <link rel="stylesheet" href="${ctx}/css/common.css">
         <script>
             var ctx = "${ctx}";
         </script>
@@ -103,9 +104,17 @@
             <a class="layui-btn layui-btn-sm" lay-event="review">
                 <i class="layui-icon">&#xe642;</i>
             </a>
-            {{#  } else {}} 请等待
+            {{#  } else {}}
             {{#  } }}
         </script>
+        <%--<script type="text/html" id="toolbar">
+            <div class="layui-btn-container">
+                <button class="layui-btn" id="export" lay-event="export">
+                    <i class="iconfont icon-export"></i> 导出（暂时无法正常使用）
+                </button>
+            </div>
+        </script>--%>
+
         <script type="text/javascript" src="${ctx }/layui/layui.js"></script>
         <script type="text/javascript" src="${ctx }/js/info/reviewInfo.js"></script>
 

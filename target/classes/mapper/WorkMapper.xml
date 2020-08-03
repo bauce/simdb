@@ -51,48 +51,48 @@
     wi.bgs_comment
     from
     work w
-	LEFT JOIN work_info wi on wi.wid =w.work_id 
-	<where>
+	LEFT JOIN work_info wi on wi.wid =w.work_id
+    /*keep orderby*/ORDER BY wi_create_time DESC limit 10000000000) a
+	GROUP BY work_id
+    <trim prefix="having" suffixOverrides="and">
       <if test="null != userId and '' != userId">
-        and user_id = #{userId}
+         user_id = #{userId} and
       </if>
       <if test="null != workId and '' !=  workId">
-        and work_id = #{workId}
+         work_id = #{workId} and
       </if>
       <if test="null != status and '' !=  status">
         <choose>
           <when test='status=="0"'>
-            and ((work_info_id is null) or (status != 2 and status != 4))
+             ((work_info_id is null) or (status != 2 and status != 4)) and
           </when>
           <when test='status=="1"'>
-            and status = 2
+             status = 2 and
           </when>
           <when test='status=="2"'>
-            and status = 4
+            status = 4 and
           </when>
         </choose>
       </if>
       <if test="null != type and '' !=  type">
-        and type = #{type}
+         type = #{type} and
       </if>
       <if test="originKey != null and '' !=  originKey">
-       and origin like "%"#{originKey}"%"
+         origin like "%"#{originKey}"%" and
       </if>
       <if test="contentKey != null and '' != contentKey">
-       and content like "%"#{contentKey}"%"
+         content like "%"#{contentKey}"%" and
       </if>
       <if test="dueTime !=null and '' != dueTime">
-       and due_time_ = #{dueTime}
+         due_time_ = #{dueTime} and
       </if>
       <if test="dueTimeAlt !=null and '' != dueTimeAlt">
-       and due_time_alt like "%"#{dueTimeAlt}"%"
+         due_time_alt like "%"#{dueTimeAlt}"%" and
       </if>
       <if test="finished !=null and '' != finished">
-       and w.finished = #{finished}
+         finished = #{finished} and
       </if>
-    </where>
-	ORDER BY wi_create_time DESC limit 10000000000) a
-	GROUP BY work_id
+    </trim>
   </select>
 
   <select id="getWorkById" parameterType="int" resultMap="Work">
@@ -130,7 +130,7 @@
         and due_time_alt like '%#{dueTimeAlt}%'
       </if>
       <if test="finished != null and ''!= finished">
-        and w.finished = #{finished}
+        and finished = #{finished}
       </if>
     </where>
     order by user_id asc

@@ -3,10 +3,11 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
     var layer = layui.layer, $ = layui.jquery, form = layui.form,table=layui.table,laydate = layui.laydate;
     var nowTime = new Date().valueOf();
     var max = null;
+    var curIndex;
 
     $("body").on('click','.layui-table-body tr ',function () {
         var data_index=$(this).attr('data-index');//得到当前的tr的index
-        window.sessionStorage.setItem('curIndex',data_index);
+        curIndex = data_index;
         $(".layui-table-body tr").attr({"style":"background:#FFFFFF"});//其他tr恢复颜色
         $(".layui-table-body tr[data-index="+data_index+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
 
@@ -28,6 +29,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                     type : type.val(),
                     finished : finished.val(),
                     userId : userId.val()
+
                     /*username : username.val(),*/
 
                 }
@@ -67,12 +69,12 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         ,cols: [[ // 表头
             {field:'no',title:'编号',align:'center',width:60},
             {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:150},
-            {field:'content',title:'督办内容',align:'center',width:300},
+            {field:'content',title:'督办内容',align:'center',width:200},
             {field:'origin',title:'督办依据',align:'center',width:150},
             {field:'dueTime',title:'截止时间',align:'center',templet : '#timeTpl',width:102},
             {field:'userId',title:'责任科室',align:'center',templet : '#userTpl',width:120},
             {field:'finished',title:'是否办结',align:'center',templet : '#doneTpl',width:87},
-            {field: 'right', title: '操作', align: 'center', toolbar: "#barDemo",width:150}
+            {field: 'right', title: '操作', align: 'center', toolbar: "#barDemo",width:120}
         ]]
         ,page: true // 开启分页
         ,loading:true
@@ -116,9 +118,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                     var body=layer.getChildFrame('body',index);
                 },
                 end : function () {
-                    console.log('ok');
-                    data_index = sessionStorage.getItem('curIndex');
-                    $(".layui-table-body tr[data-index="+data_index+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
+                    $(".layui-table-body tr[data-index="+curIndex+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
                 }
             });
         }

@@ -1,10 +1,11 @@
 var fdata,userListData;
 layui.use([ 'form','layer','jquery','table','laydate'], function() {
     var layer = layui.layer, $ = layui.jquery, form = layui.form,table=layui.table,laydate = layui.laydate;
-
+    var curIndex;
 
     $("body").on('click','.layui-table-body tr ',function () {
         var data_index=$(this).attr('data-index');//得到当前的tr的index
+        curIndex = data_index;
         $(".layui-table-body tr").attr({"style":"background:#FFFFFF"});//其他tr恢复颜色
         $(".layui-table-body tr[data-index="+data_index+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
     });
@@ -14,7 +15,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
             var type = $('#type option:selected');
             var finished = $('#finished option:selected');
             var userId = sessionStorage.getItem("userId");
-
+            var status = $('.status option:selected').val();
 
             table.reload('workList',{
                 page : {
@@ -23,7 +24,8 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                 where : {
                     type : type.val(),
                     finished : finished.val(),
-                    userId : sessionStorage.getItem("userId")
+                    userId : sessionStorage.getItem("userId"),
+                    status : status
                     /*username : username.val(),*/
 
                 }
@@ -62,12 +64,12 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         ,cols: [[ // 表头
             {field:'no',title:'编号',align:'center',width:60},
             {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:150},
-            {field:'content',title:'督办内容',align:'center',width:400},
+            {field:'content',title:'督办内容',align:'center',width:200},
             {field:'origin',title:'督办依据',align:'center',width:150},
             {field:'dueTime',title:'截止时间',align:'center',templet : '#timeTpl',width:102},
             {field:'finished',title:'是否办结',align:'center',templet : '#doneTpl',width:87},
             {field:'status',title:'审核状态',align:'center',templet : '#statusTpl',width:87},
-            {field: 'progress', title: '填报进度', align: 'center', toolbar: "#barDemo",width:150}
+            {field: 'progress', title: '填报进度', align: 'center', toolbar: "#barDemo",width:87}
         ]]
         ,page: true // 开启分页
         ,loading:true
@@ -87,6 +89,9 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                 content : ctx + "/info/addInfo",
                 success : function(layero, index) {
                     var body=layer.getChildFrame('body',index);
+                },
+                end : function () {
+                    $(".layui-table-body tr[data-index="+curIndex+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
                 }
             });
         }

@@ -34,6 +34,13 @@ public class WorkInfoController {
         return infoService.getLastInfoWithWork(page,limit,search);
     }
 
+    @RequestMapping("archInfo")
+    @ResponseBody
+    public ResultUtil archInfo(){
+        return null;
+    }
+
+
     @RequestMapping("reviewInfo")
     @ResponseBody
     public ResultUtil reviewInfo(WorkInfo info){
@@ -46,7 +53,6 @@ public class WorkInfoController {
     public ResultUtil submitInfo(WorkInfo info){
         return infoService.submitInfo(info);
     }
-
 
 
 }
