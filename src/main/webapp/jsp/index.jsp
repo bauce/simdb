@@ -6,6 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="${ctx}/layui/css/layui.css">
+<link rel="stylesheet" href="${ctx}/css/index.css">
 <link rel="stylesheet"
 	href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
 <link rel="stylesheet" href="${ctx }/css/main.css" media="all" />

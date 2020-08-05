@@ -19,8 +19,14 @@ public class WorkInfoController {
     @RequestMapping("addInfo")
     public String addInfo(){ return "jsp/info/addInfo";}
 
-    @RequestMapping("revInfo")
-    public String revInfo(){ return "jsp/info/reviewInfo"; }
+    @RequestMapping("viewInfo")
+    public String viewInfo(){ return "jsp/info/viewInfo";}
+
+    @RequestMapping("reviewInfo")
+    public String reviewInfo(){ return "jsp/info/reviewInfo";}
+
+    @RequestMapping("listInfo")
+    public String listInfo(){ return "jsp/info/listInfo"; }
 
     @RequestMapping("getLastInfoByWorkId")
     @ResponseBody
@@ -34,16 +40,9 @@ public class WorkInfoController {
         return infoService.getLastInfoWithWork(page,limit,search);
     }
 
-    @RequestMapping("archInfo")
+    @RequestMapping("updateInfo")
     @ResponseBody
-    public ResultUtil archInfo(){
-        return null;
-    }
-
-
-    @RequestMapping("reviewInfo")
-    @ResponseBody
-    public ResultUtil reviewInfo(WorkInfo info){
+    public ResultUtil updateInfo(WorkInfo info){
         return infoService.updateInfo(info);
     }
 
@@ -54,5 +53,11 @@ public class WorkInfoController {
         return infoService.submitInfo(info);
     }
 
+
+    @RequestMapping("archInfo")
+    @ResponseBody
+    public ResultUtil archInfo(){
+        return null;
+    }
 
 }

@@ -95,6 +95,9 @@
         <i class="layui-icon">&#xe642;</i>
     </a>
     {{#  } else {}}
+    <a class="layui-btn layui-btn-sm" lay-event="view">
+        <i class="layui-icon">&#xe63c;</i>
+    </a>
     {{#  } }}
 </script>
 <script type="text/javascript" src="${ctx }/layui/layui.js"></script>

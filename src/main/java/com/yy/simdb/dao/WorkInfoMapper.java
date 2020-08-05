@@ -25,6 +25,10 @@ public interface WorkInfoMapper {
 
     int getInfoCount(WorkInfoSearch infoSearch);
 
+    int archInfo();
+
+    int updateFinished();
+
 
 
 

@@ -62,7 +62,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         ,limit:10// 每页默认数
         ,limits:[10,20,30,40]
         ,cols: [[ // 表头
-            {field:'no',title:'编号',align:'center',width:60},
+            {field:'no',title:'编号',align:'center',hide:true,width:60},
             {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:150},
             {field:'content',title:'督办内容',align:'center',width:200},
             {field:'origin',title:'督办依据',align:'center',width:150},
@@ -81,7 +81,38 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         var data = obj.data;
         fdata = data;
         console.log(obj);
-        if (obj.event === 'edit') {
+        switch (obj.event) {
+            case 'edit':
+                var editIndex = layer.open({
+                    type : 2,
+                    title : "填写进度",
+                    area : [ '450px', '500px' ],
+                    content : ctx + "/info/addInfo",
+                    success : function(layero, index) {
+                        var body=layer.getChildFrame('body',index);
+                    },
+                    end : function () {
+                        $(".layui-table-body tr[data-index="+curIndex+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
+                    }
+                });
+                break;
+            case 'view':
+                var viewIndex = layer.open({
+                    type : 2,
+                    title : "查看进度",
+                    area : [ '450px', '420px' ],
+                    content : ctx + "/info/viewInfo",
+                    success : function(layero, index) {
+                        var body=layer.getChildFrame('body',index);
+                    },
+                    end : function () {
+                        $(".layui-table-body tr[data-index="+curIndex+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
+                    }
+                });
+                break;
+
+        }
+        /*if (obj.event === 'edit') {
             var editIndex = layer.open({
                 type : 2,
                 title : "填写进度",
@@ -94,7 +125,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                     $(".layui-table-body tr[data-index="+curIndex+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
                 }
             });
-        }
+        }*/
     });
 
     $(".search_btn").click(function() {

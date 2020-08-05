@@ -64,7 +64,7 @@
       <if test="null != status and '' !=  status">
         <choose>
           <when test='status=="0"'>
-             ((work_info_id is null) or (status != 2 and status != 4)) and
+             (finished = 0 and ((work_info_id is null) or (status != 2 and status != 4 ))) and
           </when>
           <when test='status=="1"'>
              status = 2 and
@@ -147,7 +147,11 @@
     where finished = 0
   </select>
 
+  <update id="archInfo">
 
+  </update>
+  
+  
 
 
   <sql id="Example_Where_Clause">

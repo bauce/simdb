@@ -1,205 +1,180 @@
-var fdata,userListData;
-layui.use([ 'form','layer','jquery','table','laydate'], function() {
-    var layer = layui.layer, $ = layui.jquery, form = layui.form,table=layui.table,laydate = layui.laydate;
-    var exportData;
+var $,tab;
+layui.config({
+    base: '../js/' //你存放新模块的目录，注意，不是layui的模块目录
+}).use(['bodyTab', 'form', 'element', 'layer', 'jquery' ,'laytpl'], function() {
+    $ = layui.jquery;
+    var element = layui.element;
+    var layer = layui.layer;
+    var form = layui.form;
+    var laytpl = layui.laytpl;
 
-    $("body").on('click','.layui-table-body tr ',function () {
-        var data_index=$(this).attr('data-index');//得到当前的tr的index
-        $(".layui-table-body tr").attr({"style":"background:#FFFFFF"});//其他tr恢复颜色
-        $(".layui-table-body tr[data-index="+data_index+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
 
+    var data = parent.fdata;
+    $(".content").val(data.content);
+
+    if (null != data.info){
+        $(".info").val(data.info.info);
+        $(".finished").val(data.info.finished);
+        $('.workInfoId').val(data.info.workInfoId);
+        form.render('select');
+    }
+
+
+    laytpl($("#typeTpl").html()).render({
+        type: data.type
+    }, function(string){
+        $(".type").val(string);
     });
 
-    active = {
-        search : function(){
-            var type = $('#type option:selected').val();
-            var finished = $('#finished option:selected').val();
-            var status = $('.status option:selected').val();
-            var userId = $('#dp option:selected').val();
-
-
-            table.reload('workList',{
-                page : {
-                    curr : 1
-                },
-                where : {
-                    type : type,
-                    finished : finished,
-                    status: status,
-                    userId: userId
-                    /*username : username.val(),*/
-
-                }
-            });
-        }
-    };
-
-
-    //获取用户名和id，装入下拉菜单，并存入全局变量
-    $.ajax({
+    /*$.ajax({
         type: "post",
-        url: ctx+"/user/getUserList",
+        url: ctx+'/info/getLastInfoByWorkId',
+        data: {
+            wid : data.workId
+        },
         async:false,
         dataType:"json",
-        success:function(d){
-            if(0==d.code){
-                userListData = d.data;
-                $.each(d.data, function(index, item) {
-                    $('#dp').append(new Option(item.username, item.userId));
-                    $('#dp').removeAttr("disabled");
-                });
-                form.render("select");
-            }else {
-                layer.msg(d.message);
+        success:function(d) {
+            if (0 == d.code){
+                infoData = d.data;
+                if(d.data.length != 0){
+                    $(".info").val(d.data[0].info);
+                    $(".finished").val(d.data[0].finished);
+                    $('.workInfoId').val(d.data[0].workInfoId);
+                    form.render('select');
+                }
             }
-        }}
-    );
-
-
-    var ins = table.render({
-        id:'workList'
-        ,elem: '#workList'
-        ,url: ctx+'/work/getWorkWithLastInfo'// 数据接口
-        ,toolbar : '#toolbar'
-        ,defaultToolbar: ['filter']
-        ,limit:10// 每页默认数
-        ,limits:[10,20,30,40]
-        ,cols: [[ // 表头
-            {field:'no',title:'编号',align:'center',templet : '<div>{{ d.no}}</div>',hide:true,width:60},
-            /*{field:'workInfoId',title:'编号',align:'center',templet : '<div>{{ d.info.workInfoId}}</div>',hide:true,width:60},*/
-            {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:150},
-            {field:'content',title:'督办内容',align:'center',width:200},
-            {field:'origin',title:'督办依据',align:'center',width:150},
-            {field:'userId',title:'责任科室',align:'center',templet : '#userTpl',width:120},
-            {field:'dueTime',title:'截止时间',align:'center',templet : '#timeTpl',width:102},
-            {field:'finished',title:'是否办结',align:'center',templet : '#doneTpl',width:87},
-            {field:'info',title:'最新进度',align:'center',templet : '#infoTpl',width:87},
-            {field:'status',title:'审核状态',align:'center',templet : '#statusTpl',width:87},
-            {field: 'progress', title: '审核进度', align: 'center', toolbar: "#barDemo",width:87}
-        ]],
-        done: function (res, curr, count) {
-            exportData=res.data;
         }
-        ,page: true // 开启分页
-        ,loading:true
-        ,where: {timestamp: (new Date()).valueOf()}
-    });
+    });*/
 
-    $('#export').click(function () {
-        table.exportFile(ins.config.id,exportData,"xls");
-    });
 
-    table.on('tool(workList)', function (obj) {
-        var data = obj.data;
-        console.log(data);
-        if (obj.event === 'review') {
-            layer.msg('审核通过？', {
-                time: 0
-                , btn: ['通过', '不通过','取消']
-                , yes: function (index) {
-                    $.ajax({
-                        type: "post"
-                        ,url: ctx + "/info/reviewInfo"
-                        ,data:{
-                            workInfoId:data.info.workInfoId,
-                            status:4
-                        },
-                        success:function (d) {
-                            if (d.code == 0) {
-                                layer.msg("审核成功！",{icon: 1});
-                                $(obj.tr).children('td').eq(9).html('已通过通过');
-                                $(obj.tr).children('td').eq(10).html('请等待');
-                                /*obj.update({
-                                    status:4
-                                });*/
-                                table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
-                            } else {
-                                layer.msg("审核失败！", {
-                                    icon : 5
-                                });
-                            }
-                        }
-                    })
-                }, btn2: function (index) {
-                    $.ajax({
-                        type: "post"
-                        ,url: ctx + "/info/reviewInfo"
-                        ,data:{
-                            workInfoId:data.info.workInfoId,
-                            status:3
-                        },
-                        success:function (d) {
-                            if (d.code == 0) {
-                                layer.msg("审核成功！",{icon: 1});
-                                $(obj.tr).children('td').eq(9).html('未通过');
-                                $(obj.tr).children('td').eq(10).html('请等待');
-                                /*obj.update({
-                                    status:3
-                                });*/
-                                table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
-                            } else {
-                                layer.msg("审核失败！", {
-                                    icon : 5
-                                });
-                            }
-                        }
-                    })
-                }, btn3: function (index) {
-                    close(index);
-                }
-            });
-            /*var editIndex = layer.open({
-                type : 2,
-                title : "填写进度",
-                area : [ '450px', '500px' ],
-                content : ctx + "/info/addInfo",
-                success : function(layero, index) {
-                    var body=layer.getChildFrame('body',index);
-                }
-            });*/
+
+
+    form.on("submit(noPass)",function (obj) {
+        if("" == $('.finished').val() || null == $('.finished').val()){
+            layer.alert("是否办结不能为空！");
+            return false;
+        }else if("" == $.trim($('.info').val()) || null == $.trim($('.info').val())){
+            layer.alert("推进情况不能为空！");
+            return false;
         }
+
+        var index = top.layer.msg("数据提交中，请稍候",{icon: 16,time:false,shade:0.2});
+        var  index1 = parent.layer.getFrameIndex(window.name);
+
+        var msg,flag=false;
+        $.ajax({
+            type: "post",
+            url: ctx + "/info/updateInfo",
+            async: false,
+            dataType: "json",
+            data:{
+                workInfoId:$('.workInfoId').val(),
+                finished:$('.finished').val(),
+                info:$('.info').val(),
+                status:3 /*不通过*/
+            },
+            success:function (result) {
+                if(result.code == 0) {
+                    msg = "审核成功";
+                    flag = true;
+                    /*$(obj.tr).children('td').eq(7).html('暂存');*/
+                }else {
+                    msg = "审核失败！";
+                }
+            },
+            error:function () {
+                layer.msg("提交失败")
+                layer.closeAll();
+                return false;
+            }/*,
+            end:function () {
+                parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
+            }*/
+        });
+        setTimeout(function () {
+            parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
+            parent.layer.close(index1);
+            top.layer.close(index);
+            if(flag){
+                top.layer.msg(msg,{icon: 1});
+            }else{
+                top.layer.msg(msg,{icon: 5});
+            }
+            /*parent.location.reload();*/
+        }, 1000);
+        return false;
     });
 
-    $(".search_btn").click(function() {
-        var type = $(this).data('type');
-        active[type] ? active[type].call(this) : '';
+    form.on("submit(pass)",function (obj) {
+        if("" == $('.finished').val() || null == $('.finished').val()){
+            layer.alert("是否办结不能为空！");
+            return false;
+        }else if("" == $.trim($('.info').val()) || null == $.trim($('.info').val())){
+            layer.alert("推进情况不能为空！");
+            return false;
+        }
+
+        var index = top.layer.msg("数据提交中，请稍候",{icon: 16,time:false,shade:0.2});
+        var  index1 = parent.layer.getFrameIndex(window.name);
+
+        var msg,flag=false;
+        $.ajax({
+            type: "post",
+            url: ctx + "/info/updateInfo",
+            async: false,
+            dataType: "json",
+            data:{
+                workInfoId:$('.workInfoId').val(),
+                finished:$('.finished').val(),
+                info:$('.info').val(),
+                status:4 /*通过*/
+            },
+            success:function (result) {
+                if(result.code == 0) {
+                    msg = "审核成功!";
+                    flag = true;
+                    /*$(obj.tr).children('td').eq(7).html('暂存');*/
+                }else {
+                    msg = "审核失败！";
+                }
+            },
+            error:function () {
+                layer.msg("提交失败")
+                layer.closeAll();
+                return false;
+            }/*,
+            end:function () {
+                parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
+            }*/
+        });
+        setTimeout(function () {
+            parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
+            parent.layer.close(index1);
+            top.layer.close(index);
+            if(flag){
+                top.layer.msg(msg,{icon: 1});
+            }else{
+                top.layer.msg(msg,{icon: 5});
+            }
+            /*parent.location.reload();*/
+        }, 1000);
+        return false;
     });
 
+
+    /*laytpl($("#doneTpl").html()).render({
+        finished: data.finished
+    }, function(string){
+        $(".finished").val(string);
+    });*/
+    function show_wait(){
+        return layer.load(1, {shade: [0.5,'#000']});
+    };
+
+    function close_wait(index){
+        layer.close(index);
+    }
 
 
 });
-
-
-// 格式化时间
-function formatTime(datetime, fmt) {
-    if (datetime == null || datetime == 0) {
-        return "";
-    }
-    if (parseInt(datetime) == datetime) {
-        if (datetime.length == 10) {
-            datetime = parseInt(datetime) * 1000;
-        } else if (datetime.length == 13) {
-            datetime = parseInt(datetime);
-        }
-    }
-    datetime = new Date(datetime);
-    var o = {
-        "M+" : datetime.getMonth() + 1, // 月份
-        "d+" : datetime.getDate(), // 日
-        "h+" : datetime.getHours(), // 小时
-        "m+" : datetime.getMinutes(), // 分
-        "s+" : datetime.getSeconds(), // 秒
-        "q+" : Math.floor((datetime.getMonth() + 3) / 3), // 季度
-        "S" : datetime.getMilliseconds()
-        // 毫秒
-    };
-    if (/(y+)/.test(fmt))
-        fmt = fmt.replace(RegExp.$1, (datetime.getFullYear() + "")
-            .substr(4 - RegExp.$1.length));
-    for ( var k in o)
-        if (new RegExp("(" + k + ")").test(fmt))
-            fmt = fmt.replace(RegExp.$1,
-                (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k])
-                    .substr(("" + o[k]).length)));
-    return fmt;
-}

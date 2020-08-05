@@ -36,8 +36,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">是否办结</label>
             <div class="layui-input-block" style="align-items:center; display: -webkit-flex;">
-                <select class="finished">
-                    <option value="" disabled selected hidden>状态</option>
+                <select class="finished" disabled="disabled">
+                    <option value="" disabled selected hidden >状态</option>
                     <option value="0">未办结</option>
                     <option value="1">已办结</option>
                 </select>
@@ -46,20 +46,14 @@
         <div class="layui-form-item">
             <label class="layui-form-label">推进情况</label>
             <div class="layui-input-block" style="align-items:center; display: -webkit-flex;">
-                <textarea name="info" class="layui-textarea info" ></textarea>
+                <textarea name="info" class="layui-textarea info" disabled="disabled" ></textarea>
             </div>
         </div>
 
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn" lay-submit="" lay-filter="noPass">不通过</button>
-                <button class="layui-btn" lay-submit="" lay-filter="pass">通过</button>
-            </div>
-        </div>
 
     </form>
     <script type="text/javascript" src="${ctx }/layui/layui.js"></script>
-    <script type="text/javascript" src="${ctx }/js/info/reviewInfo.js"></script>
+    <script type="text/javascript" src="${ctx }/js/info/viewInfo.js"></script>
     <script type="text/html" id="typeTpl">
         {{#  if(d.type == 1){}} 工作要点
         {{#  } else if(d.type == 2){}} 领导批示

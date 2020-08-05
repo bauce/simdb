@@ -14,8 +14,9 @@
 	<div class="b">
 		<span id="clock"></span>
 	</div>
-	<h2>欢迎使用<div class="wrap">
-		<strong>都江堰市纪委督查督办系统</strong>
+	<h2>欢迎使用
+		<span>
+		<br><strong>督查督办系统</strong>
 		</span></h2>
 
 	</div>

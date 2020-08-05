@@ -52,6 +52,9 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
 	    var data = obj.data;
 	    fdata =data;
 	    if (obj.event === 'delete') {
+	    	if (data.userId == 1){
+	    		layer.alert("不能删除办公室");
+			}
 	        layer.confirm('确定要删除 '+data.username+' 么？', function (index) {
 	        	$.ajax({
 					url : ctx + '/user/deleteUserById',

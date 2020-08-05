@@ -3,8 +3,8 @@ layui.use([ 'element', 'layer'], function(exports) {
     var element = layui.element;
     var layer = layui.layer;
 
-    $(function() {
 
+    $(function() {
         $('#loginBt').on('click', function() {
             var code = $('#code').val();
             var username = $('#username').val();

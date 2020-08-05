@@ -1,6 +1,5 @@
 package com.yy.simdb.service;
 
-import com.yy.simdb.entity.Work;
 import com.yy.simdb.entity.WorkInfo;
 import com.yy.simdb.entity.WorkInfoSearch;
 import com.yy.simdb.util.ResultUtil;
@@ -18,10 +17,6 @@ public interface InfoService {
     ResultUtil getLastInfoByWorkId(int wid);
 
     ResultUtil submitInfo(WorkInfo info);
-
-    ResultUtil reviewInfo(Work info);
-
-    ResultUtil insetAInfoByWid(int wid);
 
     ResultUtil insertInfoListByWids(List<Integer> wids);
 

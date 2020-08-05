@@ -11,12 +11,6 @@ layui.config({
     var infoData ;
     $(".content").val(data.content);
 
-    if (null != data.info){
-        $(".info").val(data.info.info);
-        $(".finished").val(data.info.finished);
-        $('.workInfoId').val(data.info.workInfoId);
-        form.render('select');
-    }
 
     laytpl($("#typeTpl").html()).render({
         type: data.type
@@ -24,7 +18,7 @@ layui.config({
         $(".type").val(string);
     });
 
-    /*$.ajax({
+    $.ajax({
         type: "post",
         url: ctx+'/info/getLastInfoByWorkId',
         data: {
@@ -43,7 +37,7 @@ layui.config({
                 }
             }
         }
-    });*/
+    });
 
     form.on("submit(saveInfo)",function (obj) {
         if("" == $('.finished').val() || null == $('.finished').val()){
@@ -98,7 +92,7 @@ layui.config({
                 top.layer.msg(msg,{icon: 5});
             }
             /*parent.location.reload();*/
-        }, 1000);
+        }, 2000);
         return false;
     });
 

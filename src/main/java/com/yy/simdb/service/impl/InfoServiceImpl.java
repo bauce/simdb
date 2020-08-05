@@ -75,15 +75,6 @@ public class InfoServiceImpl implements InfoService {
         return  new ResultUtil(0);
     }
 
-    @Override
-    public ResultUtil reviewInfo(Work info) {
-        return null;
-    }
-
-    @Override
-    public ResultUtil insetAInfoByWid(int wid) {
-        return null;
-    }
 
     @Override
     public ResultUtil insertInfoListByWids(List<Integer> wids) {
@@ -109,19 +100,21 @@ public class InfoServiceImpl implements InfoService {
         WorkInfoSearch infoSearch = new WorkInfoSearch();
         infoSearch.setFinished(Integer.toString(0));
         List<Work> allInfo = workMapper.getWorkWithLastInfo(infoSearch);
-        infoSearch.setStatus(Integer.toString(3));
-        List<Work> allReviewedInfo = workMapper.getWorkWithLastInfo(infoSearch);
-        if (allInfo.size()!=allReviewedInfo.size()){
+        infoSearch.setStatus(Integer.toString(4));
+        List<Work> reviewedInfo = workMapper.getWorkWithLastInfo(infoSearch);
+        if (allInfo.size()!= reviewedInfo.size()){
             resultUtil = new ResultUtil();
             resultUtil.setCode(500);
             Map<String,Integer> map = new HashMap<>();
             map.put("all",allInfo.size());
-            map.put("rev",allReviewedInfo.size());
+            map.put("rev",reviewedInfo.size());
             resultUtil.setData(map);
             return resultUtil;
         }else {
-            
+            infoMapper.archInfo();
+            infoMapper.updateFinished();
+            resultUtil = new ResultUtil();
+            return ResultUtil.ok("操作成功");
         }
-        return null;
     }
 }

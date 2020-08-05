@@ -67,7 +67,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         ,limit:10// 每页默认数
         ,limits:[10,20,30,40]
         ,cols: [[ // 表头
-            {field:'no',title:'编号',align:'center',width:60},
+            {field:'no',title:'编号',align:'center',hide:true,width:60},
             {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:150},
             {field:'content',title:'督办内容',align:'center',width:200},
             {field:'origin',title:'督办依据',align:'center',width:150},
