@@ -100,7 +100,7 @@ public class InfoServiceImpl implements InfoService {
         WorkInfoSearch infoSearch = new WorkInfoSearch();
         infoSearch.setFinished(Integer.toString(0));
         List<Work> allInfo = workMapper.getWorkWithLastInfo(infoSearch);
-        infoSearch.setStatus(Integer.toString(4));
+        infoSearch.setStatus(Integer.toString(2));
         List<Work> reviewedInfo = workMapper.getWorkWithLastInfo(infoSearch);
         if (allInfo.size()!= reviewedInfo.size()){
             resultUtil = new ResultUtil();

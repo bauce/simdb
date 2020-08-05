@@ -107,13 +107,16 @@
             {{#  } else {}}
             {{#  } }}
         </script>
-        <%--<script type="text/html" id="toolbar">
+        <script type="text/html" id="toolbar">
             <div class="layui-btn-container">
                 <button class="layui-btn" id="export" lay-event="export">
-                    <i class="iconfont icon-export"></i> 导出（暂时无法正常使用）
+                     导出（暂时无法正常使用）
+                </button>
+                <button class="layui-btn" id="arch" lay-event="arch">
+                     归档
                 </button>
             </div>
-        </script>--%>
+        </script>
 
         <script type="text/javascript" src="${ctx }/layui/layui.js"></script>
         <script type="text/javascript" src="${ctx }/js/info/listInfo.js"></script>

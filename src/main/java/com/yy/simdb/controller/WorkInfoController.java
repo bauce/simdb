@@ -57,7 +57,7 @@ public class WorkInfoController {
     @RequestMapping("archInfo")
     @ResponseBody
     public ResultUtil archInfo(){
-        return null;
+        return infoService.archInfo();
     }
 
 }

@@ -92,6 +92,25 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         table.exportFile(ins.config.id,exportData,"xls");
     });
 
+    $('#arch').click(function () {
+        layer.confirm('确定要归档吗？',function (index) {
+            $.ajax({
+                url: ctx + '/info/archInfo',
+                async: false,
+                success:function (d) {
+                    if(0==d.code){
+                        layer.msg("操作成功！",{icon: 1});
+                    }else {
+                        layer.msg('还有未审核的内容，请检查',{icon: 5});
+                    }
+                },
+                error: function () {
+                    layer.msg("操作失败",{icon: 5});
+                }
+            })
+        })
+    });
+
     table.on('tool(workList)', function (obj) {
         var data = obj.data;
         console.log(data);

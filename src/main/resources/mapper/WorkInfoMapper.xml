@@ -278,15 +278,15 @@
   
   <update id="updateFinished">
     update work set finished = 1 where work_id in
-    SELECT work_id FROM
+    (SELECT work_id FROM
     (SELECT * FROM
     (SELECT
-        work_id,
+    work_id,
 		status,
 		wi.finished as w_finished
     from
     work w
-		LEFT OUTER JOIN work_info wi on wi.wid =w.work_id  ORDER BY wi.create_time DESC limit 10000000000) a GROUP BY work_id HAVING  w_finished = 1) b
+		LEFT OUTER JOIN work_info wi on wi.wid =w.work_id  ORDER BY wi.create_time DESC limit 10000000000) a GROUP BY work_id HAVING  w_finished = 1) b)
   </update>
 
   <sql id="Example_Where_Clause">

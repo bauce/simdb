@@ -11,7 +11,7 @@ layui.config({
     var infoData ;
     $(".content").val(data.content);
 
-    if (null != data.info){
+    if (null != data.info && data.info.status != 5 ){
         $(".info").val(data.info.info);
         $(".finished").val(data.info.finished);
         $('.workInfoId').val(data.info.workInfoId);
