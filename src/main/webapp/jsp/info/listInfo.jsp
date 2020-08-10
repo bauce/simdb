@@ -101,10 +101,13 @@
         </script>
         <script type="text/html" id="barDemo">
             {{#  if((d.finished == 0)&&(null != d.info)&&(d.info.status == 2)){ }}
-            <a class="layui-btn layui-btn-sm" lay-event="review">
+            <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="review">
                 <i class="layui-icon">&#xe642;</i>
             </a>
             {{#  } else {}}
+            <a class="layui-btn layui-btn-sm" lay-event="view">
+                <i class="layui-icon" >&#xe63c;</i>
+            </a>
             {{#  } }}
         </script>
         <script type="text/html" id="toolbar">

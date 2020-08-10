@@ -40,7 +40,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">工作由来</label>
             <div class="layui-input-inline">
-                <input type="text" name="origin"  class="layui-input"
+                <input type="text" name="origin"  class="layui-input origin"
                        placeholder="请输入工作由来" value="">
             </div>
             <label class="layui-form-label">责任科室</label>

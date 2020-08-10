@@ -70,8 +70,8 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         ,cols: [[ // 表头
             {field:'no',title:'编号',align:'center',templet : '<div>{{ d.no}}</div>',hide:true,width:60},
             /*{field:'workInfoId',title:'编号',align:'center',templet : '<div>{{ d.info.workInfoId}}</div>',hide:true,width:60},*/
-            {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:150},
-            {field:'content',title:'督办内容',align:'center',width:200},
+            {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:90},
+            {field:'content',title:'督办内容',align:'center',templet:'<div"><span title="{{d.origin}}"><p style="text-indent: 2em;font-size: 15px;text-align:left">{{d.content}}</p></span></div>',width:400},
             {field:'origin',title:'督办依据',align:'center',hide:true,width:150},
             {field:'userId',title:'责任科室',align:'center',templet : '#userTpl',width:120},
             {field:'dueTime',title:'截止时间',align:'center',templet : '#timeTpl',width:102},
@@ -100,8 +100,8 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                 success:function (d) {
                     if(0==d.code){
                         layer.msg("操作成功！",{icon: 1});
-                    }else {
-                        layer.msg('还有未审核的内容，请检查',{icon: 5});
+                    }else if (500 == d.code){
+                        layer.msg('还有未审核或未填报的内容，请检查',{icon: 5});
                     }
                 },
                 error: function () {
@@ -116,7 +116,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         console.log(data);
         fdata = data;
         if (obj.event === 'review') {
-            var editIndex = layer.open({
+            var reviewIndex = layer.open({
                 type : 2,
                 title : "填写进度",
                 area : [ '450px', '500px' ],
@@ -128,70 +128,19 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                     $(".layui-table-body tr[data-index="+curIndex+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
                 }
             });
-            /*layer.msg('审核通过？', {
-                time: 0
-                , btn: ['通过', '不通过','取消']
-                , yes: function (index) {
-                    $.ajax({
-                        type: "post"
-                        ,url: ctx + "/info/reviewInfo"
-                        ,data:{
-                            workInfoId:data.info.workInfoId,
-                            status:4
-                        },
-                        success:function (d) {
-                            if (d.code == 0) {
-                                layer.msg("审核成功！",{icon: 1});
-                                $(obj.tr).children('td').eq(9).html('已通过通过');
-                                $(obj.tr).children('td').eq(10).html('请等待');
-                                /!*obj.update({
-                                    status:4
-                                });*!/
-                                table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
-                            } else {
-                                layer.msg("审核失败！", {
-                                    icon : 5
-                                });
-                            }
-                        }
-                    })
-                }, btn2: function (index) {
-                    $.ajax({
-                        type: "post"
-                        ,url: ctx + "/info/reviewInfo"
-                        ,data:{
-                            workInfoId:data.info.workInfoId,
-                            status:3
-                        },
-                        success:function (d) {
-                            if (d.code == 0) {
-                                layer.msg("审核成功！",{icon: 1});
-                                $(obj.tr).children('td').eq(9).html('未通过');
-                                $(obj.tr).children('td').eq(10).html('请等待');
-                                /!*obj.update({
-                                    status:3
-                                });*!/
-                                table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
-                            } else {
-                                layer.msg("审核失败！", {
-                                    icon : 5
-                                });
-                            }
-                        }
-                    })
-                }, btn3: function (index) {
-                    close(index);
-                }
-            });*/
-            /*var editIndex = layer.open({
+        }else if (obj.event === 'view'){
+            var viewIndex = layer.open({
                 type : 2,
-                title : "填写进度",
-                area : [ '450px', '500px' ],
-                content : ctx + "/info/addInfo",
+                title : "查看进度",
+                area : [ '450px', '420px' ],
+                content : ctx + "/info/viewInfo",
                 success : function(layero, index) {
                     var body=layer.getChildFrame('body',index);
+                },
+                end : function () {
+                    $(".layui-table-body tr[data-index="+curIndex+"]").attr({"style":"background:#99ff99"});//改变当前tr颜色
                 }
-            });*/
+            });
         }
     });
 

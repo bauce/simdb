@@ -91,7 +91,7 @@
 <script type="text/html" id="barDemo">
 <%--    {{#  if((null == d.info)||(d.finished == 0 && null != d.info && d.info.status != 2 && d.info.status != 4)){ }}--%>
     {{#  if((d.finished == 0)&&((null == d.info)||(null != d.info && d.info.status != 2 && d.info.status != 4))){ }}
-    <a class="layui-btn layui-btn-sm" lay-event="edit">
+    <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="edit">
         <i class="layui-icon">&#xe642;</i>
     </a>
     {{#  } else {}}

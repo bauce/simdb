@@ -105,7 +105,7 @@ layui.config({
     form.on("submit(submitInfo)",function (obj) {
         console.log(obj);
         if("" == $('.finished').val() || null == $('.finished').val()){
-            layer.alert("完成状态不能为空！");
+            layer.alert("是否办结不能为空！");
             return false;
         }else if("" == $.trim($('.info').val()) || null == $.trim($('.info').val())){
             layer.alert("推进情况不能为空！");

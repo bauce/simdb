@@ -63,8 +63,8 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
         ,limits:[10,20,30,40]
         ,cols: [[ // 表头
             {field:'no',title:'编号',align:'center',hide:true,width:60},
-            {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:150},
-            {field:'content',title:'督办内容',align:'center',width:200},
+            {field:'type',title:'类型',align:'center',templet : '#typeTpl',width:90},
+            {field:'content',title:'督办内容',align:'center',templet:'<div"><span title="{{d.origin}}"><p style="text-indent: 2em;font-size: 15px;text-align:left">{{d.content}}</p></span></div>',width:400},
             {field:'origin',title:'督办依据',align:'center',width:150},
             {field:'dueTime',title:'截止时间',align:'center',templet : '#timeTpl',width:102},
             {field:'finished',title:'是否办结',align:'center',templet : '#doneTpl',width:87},

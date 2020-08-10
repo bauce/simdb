@@ -53,17 +53,17 @@ layui.config({
     form.on("submit(addWork)",function(data){
 
         var type = $("select[name='type']").val();
-        var origin = $.trim($("text[name='origin']").val());
+        var origin = $('.origin').val()
         var userId = $("select[name='userId']").val();
         var content = $.trim($("textarea[name='content']").val());
-        var dueTime = $("text[name='dueTime']").val();
-        var dueTimeAlt = $.trim($("text[name='dueTimeAlt']").val());
+        var dueTime = $('.dueTime').val();
+        var dueTimeAlt = $('.dueTimeAlt').val();
 
         if("" == type || null == type){
             layer.alert("工作类型不能为空！");
             return false;
         }else if("" == origin || null == origin){
-            layer.alert("工作来源不能为空！");
+            layer.alert("工作由来不能为空！");
             return false;
         }else if("" == userId || null == userId){
             layer.alert("责任单位不能为空！");
@@ -72,7 +72,9 @@ layui.config({
             layer.alert("内容不能为空！");
             return false;
         }else if(("" == dueTime || null == dueTime)&&("" == dueTimeAlt || null == dueTimeAlt)){
-            layer.alert("办结时限不能为空！");
+            $("input[name=time][value=0]").attr("checked","true");
+            $(".dueTimeAlt").toggle();
+            $('.dueTimeAlt').val('时间未明确');
             return false;
     }
 
@@ -111,8 +113,9 @@ layui.config({
             }else{
                 top.layer.msg(msg,{icon: 5});
             }
-            parent.location.reload();
-        },2000);
+            /*parent.location.reload();*/
+            parent.layui.table.reload('workList',{page:{curr:$(".layui-laypage-em").next().html()}});
+        },1000);
         return false;
     });
 
