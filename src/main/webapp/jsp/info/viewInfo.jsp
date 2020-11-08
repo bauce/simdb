@@ -19,7 +19,7 @@
 </head>
 <body>
     <br>
-    <form class="layui-form" style="width: 80%" id="auf">
+    <form class="layui-form" style="width: 90%" id="auf">
         <input type="hidden" name="workInfoId" class="workInfoId"/>
         <div class="layui-form-item">
             <label class="layui-form-label">工作类别</label>

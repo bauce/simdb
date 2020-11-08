@@ -10,7 +10,6 @@ layui.use([ 'element', 'layer'], function(exports) {
             var username = $('#username').val();
             console.log(username);
             var password = $('#password').val();
-            console.log(password);
 
             if ("" == username) {
                 layer.alert("请输入用户名！");

@@ -86,7 +86,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                 var editIndex = layer.open({
                     type : 2,
                     title : "填写进度",
-                    area : [ '450px', '500px' ],
+                    area : [ '600px', '500px' ],
                     content : ctx + "/info/addInfo",
                     success : function(layero, index) {
                         var body=layer.getChildFrame('body',index);
@@ -100,7 +100,7 @@ layui.use([ 'form','layer','jquery','table','laydate'], function() {
                 var viewIndex = layer.open({
                     type : 2,
                     title : "查看进度",
-                    area : [ '450px', '420px' ],
+                    area : [ '600px', '500px' ],
                     content : ctx + "/info/viewInfo",
                     success : function(layero, index) {
                         var body=layer.getChildFrame('body',index);
